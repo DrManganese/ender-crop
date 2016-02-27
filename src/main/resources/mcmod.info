@@ -1,0 +1,16 @@
+[
+{
+  "modid": "endercrop",
+  "name": "Ender Crop",
+  "description": "Mod which adds an ender pearl crop.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["mathiasNotDJ"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

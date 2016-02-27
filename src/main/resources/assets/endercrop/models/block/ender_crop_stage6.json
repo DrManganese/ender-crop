@@ -1,0 +1,6 @@
+{
+  "parent": "endercrop:block/ender_crop",
+  "textures": {
+    "crop": "endercrop:blocks/ender_crop_stage6"
+  }
+}
