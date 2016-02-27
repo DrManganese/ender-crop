@@ -2,6 +2,7 @@ package io.github.mathiasdj.endercrop;
 
 
 import io.github.mathiasdj.endercrop.init.ModBlocks;
+import io.github.mathiasdj.endercrop.init.ModDungeonLoot;
 import io.github.mathiasdj.endercrop.init.ModItems;
 import io.github.mathiasdj.endercrop.init.Recipes;
 import io.github.mathiasdj.endercrop.proxy.IProxy;
@@ -25,6 +26,7 @@ public class EnderCrop
         ModItems.init();
         ModBlocks.init();
         Recipes.init();
+        ModDungeonLoot.init();
     }
 
     @Mod.EventHandler
