@@ -1,2 +1,2 @@
-item.ender_seeds.name=Ender Seeds
-tile.ender_crop.name=Ender Crop
+item.endercrop:ender_seeds.name=Ender Seeds
+tile.endercrop:ender_crop.name=Ender Crop

@@ -1,9 +1,9 @@
 package io.github.mathiasdj.endercrop.init;
 
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import io.github.mathiasdj.endercrop.item.ItemEnderSeeds;
 import io.github.mathiasdj.endercrop.reference.Names;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModItems
 {

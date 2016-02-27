@@ -1,15 +1,15 @@
 package io.github.mathiasdj.endercrop.init;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import io.github.mathiasdj.endercrop.block.BlockCropEnder;
 import io.github.mathiasdj.endercrop.reference.Names;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModBlocks
 {
-    public static BlockCropEnder blockCropEnder = new BlockCropEnder(Names.Blocks.ENDER_CROP);
+    public static BlockCropEnder blockCropEnder = new BlockCropEnder();
 
     public static void init()
     {
-        GameRegistry.registerBlock(blockCropEnder, "ender_crop");
+        GameRegistry.registerBlock(blockCropEnder, Names.Blocks.ENDER_CROP);
     }
 }

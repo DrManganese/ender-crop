@@ -1,17 +1,16 @@
 package io.github.mathiasdj.endercrop;
 
-
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import io.github.mathiasdj.endercrop.init.ModBlocks;
 import io.github.mathiasdj.endercrop.init.ModDungeonLoot;
 import io.github.mathiasdj.endercrop.init.ModItems;
 import io.github.mathiasdj.endercrop.init.Recipes;
 import io.github.mathiasdj.endercrop.proxy.IProxy;
 import io.github.mathiasdj.endercrop.reference.Reference;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 public class EnderCrop
@@ -32,7 +31,7 @@ public class EnderCrop
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        proxy.initRenderingAndTextures();
+
     }
 
     @Mod.EventHandler
@@ -41,4 +40,3 @@ public class EnderCrop
 
     }
 }
-
