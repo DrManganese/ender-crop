@@ -1,16 +1,20 @@
 package io.github.mathiasdj.endercrop.block;
 
+import io.github.mathiasdj.endercrop.init.ModBlocks;
 import io.github.mathiasdj.endercrop.init.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.monster.EntityEndermite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -26,10 +30,15 @@ public class BlockCropEnder extends BlockCrops
         this.setUnlocalizedName(unlocalizedName);
     }
 
+    public boolean isOnEndstone(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.blockTilledEndStone;
+    }
+
     @Override
     protected Item getSeed()
     {
-        return ModItems.item_seeds;
+        return ModItems.item_ender_seeds;
     }
 
     @Override
@@ -41,7 +50,7 @@ public class BlockCropEnder extends BlockCrops
     @Override
     protected boolean canPlaceBlockOn(Block ground)
     {
-        return ground == Blocks.farmland || ground == Blocks.end_stone;
+        return ground == Blocks.farmland || ground == ModBlocks.blockCropEnder;
     }
 
     @Override
@@ -59,7 +68,7 @@ public class BlockCropEnder extends BlockCrops
     @Override
     public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
     {
-        return state.getValue(AGE) < 7 && worldIn.getLightFromNeighbors(pos.up()) <= 7;
+        return state.getValue(AGE) < 7 && (isOnEndstone(worldIn, pos) || worldIn.getLightFromNeighbors(pos.up()) <= 7);
     }
 
     @Override
@@ -71,19 +80,20 @@ public class BlockCropEnder extends BlockCrops
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        if (worldIn.getLightFromNeighbors(pos.up()) <= 7)
+        float baseChance = (isOnEndstone(worldIn, pos)) ? 25.0F : 50.0F;
+
+        if (worldIn.getLightFromNeighbors(pos.up()) <= 7 || isOnEndstone(worldIn, pos))
         {
             if (state.getValue(AGE) < 7)
             {
-                float chanceDivider = worldIn.getBlockState(pos.down()).getBlock().isFertile(worldIn, pos.down()) ? 2 : 1;
-
-                if (rand.nextInt((int)(25.0F / chanceDivider) + 1) == 0)
+                if (rand.nextInt((int)(baseChance / getGrowthChance(this, worldIn, pos)) + 1) == 0)
                 {
                     worldIn.setBlockState(pos, state.withProperty(AGE, state.getValue(AGE) + 1), 2);
                 }
             }
         }
     }
+
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
@@ -125,5 +135,19 @@ public class BlockCropEnder extends BlockCrops
         drops.add(new ItemStack(this.getSeed(), seeds, 0));
         if (pearls > 0) drops.add(new ItemStack(this.getCrop(), pearls, 0));
         return drops;
+    }
+
+    @Override
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te)
+    {
+        super.harvestBlock(worldIn, player, pos, state, te);
+
+        if (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.blockTilledEndStone && state.getValue(AGE) == 7 && worldIn.rand.nextInt(50) == 0)
+        {
+            EntityEndermite mite = new EntityEndermite(worldIn);
+            mite.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), MathHelper.wrapAngleTo180_float(worldIn.rand.nextFloat() * 360.0F), 0.0F);
+            worldIn.spawnEntityInWorld(mite);
+            mite.setAttackTarget(player);
+        }
     }
 }

@@ -6,7 +6,11 @@ public class Models
 {
     public static final class Item
     {
-        public static final ModelResourceLocation TEST = new ModelResourceLocation("endercrop:test_item", "inventory");
         public static final ModelResourceLocation SEEDS = new ModelResourceLocation("endercrop:ender_seeds", "inventory");
+    }
+
+    public static final class Block
+    {
+        public static final ModelResourceLocation TILLED_END_STONE = new ModelResourceLocation("endercrop:tilled_end_stone", "inventory");
     }
 }

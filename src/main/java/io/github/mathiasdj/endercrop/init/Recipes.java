@@ -8,6 +8,6 @@ public class Recipes
 {
     public static void init()
     {
-        GameRegistry.addShapedRecipe(new ItemStack(ModItems.item_seeds), " p ", "psp", " p ", 'p', Items.ender_pearl, 's', Items.wheat_seeds);
+        GameRegistry.addShapedRecipe(new ItemStack(ModItems.item_ender_seeds), " p ", "psp", " p ", 'p', Items.ender_pearl, 's', Items.wheat_seeds);
     }
 }

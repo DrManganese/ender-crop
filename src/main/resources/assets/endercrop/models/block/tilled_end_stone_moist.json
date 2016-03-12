@@ -1,0 +1,8 @@
+{
+  "parent": "endercrop:block/tilled_end_stone",
+  "textures": {
+    "particle": "blocks/end_stone",
+    "end_stone": "blocks/end_stone",
+    "top": "endercrop:blocks/tilled_end_stone_moist"
+  }
+}
