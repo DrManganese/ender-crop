@@ -5,7 +5,7 @@ public class Reference
 {
     public static final String MOD_ID = "endercrop";
     public static final String MOD_NAME = "Ender Crop";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.8.9-1.1";
 
     public static final String CLIENT_PROXY_CLASS = "io.github.mathiasdj.endercrop.proxy.ClientProxy";
     public static final String SERVER_PROXY_CLASS = "io.github.mathiasdj.endercrop.proxy.ServerProxy";
