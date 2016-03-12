@@ -111,6 +111,12 @@ public class BlockTilledEndStone extends BlockFarmland
     }
 
     @Override
+    public boolean isFertile(World world, BlockPos pos)
+    {
+        return (world.getBlockState(pos).getValue(BlockTilledEndStone.MOISTURE)) > 0;
+    }
+
+    @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Blocks.end_stone.getItemDropped(Blocks.end_stone.getDefaultState(), rand, fortune);
