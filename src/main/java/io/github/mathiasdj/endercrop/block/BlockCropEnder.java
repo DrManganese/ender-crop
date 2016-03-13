@@ -62,7 +62,8 @@ public class BlockCropEnder extends BlockCrops
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        return playerIn.getHeldItem().getItem().equals(Items.dye);
+        ItemStack heldItem = playerIn.getHeldItem();
+        return heldItem == null || heldItem.getItem().equals(Items.dye);
     }
 
     @Override
@@ -106,14 +107,7 @@ public class BlockCropEnder extends BlockCrops
         int pearls = 0;
         int seeds = 1;
 
-        //not fully grown
-        if (age < 7)
-        {
-            //90% chance to get a seed back
-            if (rand.nextInt(10) < 9) seeds++;
-        }
-        //fully grown
-        else
+        if (age == 7)
         {
             //10% chance to get an extra seed
             if (rand.nextInt(10) == 9)
