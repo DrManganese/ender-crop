@@ -1,6 +1,7 @@
 package io.github.mathiasdj.endercrop;
 
 
+import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
 import io.github.mathiasdj.endercrop.handler.UseHoeEventHandler;
 import io.github.mathiasdj.endercrop.init.ModBlocks;
 import io.github.mathiasdj.endercrop.init.ModDungeonLoot;
@@ -26,6 +27,8 @@ public class EnderCrop
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        EnderCropConfiguration.init(event.getSuggestedConfigurationFile());
+
         ModItems.init();
         ModBlocks.init();
         Recipes.init();
@@ -37,8 +40,8 @@ public class EnderCrop
     public void init(FMLInitializationEvent event)
     {
         proxy.initRenderingAndTextures();
-
-        MinecraftForge.EVENT_BUS.register(new UseHoeEventHandler());
+        if (EnderCropConfiguration.tilledEndStone)
+            MinecraftForge.EVENT_BUS.register(new UseHoeEventHandler());
     }
 
     @Mod.EventHandler

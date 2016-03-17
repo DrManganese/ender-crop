@@ -2,6 +2,7 @@ package io.github.mathiasdj.endercrop.init;
 
 import io.github.mathiasdj.endercrop.block.BlockCropEnder;
 import io.github.mathiasdj.endercrop.block.BlockTilledEndStone;
+import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
 import io.github.mathiasdj.endercrop.reference.Names;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -13,6 +14,7 @@ public class ModBlocks
     public static void init()
     {
         GameRegistry.registerBlock(blockCropEnder, Names.Blocks.ENDER_CROP);
-        GameRegistry.registerBlock(blockTilledEndStone, Names.Blocks.TILLED_END_STONE);
+        if (EnderCropConfiguration.tilledEndStone)
+            GameRegistry.registerBlock(blockTilledEndStone, Names.Blocks.TILLED_END_STONE);
     }
 }

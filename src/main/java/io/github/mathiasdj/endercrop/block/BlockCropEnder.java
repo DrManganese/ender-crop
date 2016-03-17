@@ -1,5 +1,6 @@
 package io.github.mathiasdj.endercrop.block;
 
+import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
 import io.github.mathiasdj.endercrop.init.ModBlocks;
 import io.github.mathiasdj.endercrop.init.ModItems;
 import net.minecraft.block.Block;
@@ -135,13 +136,15 @@ public class BlockCropEnder extends BlockCrops
     public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te)
     {
         super.harvestBlock(worldIn, player, pos, state, te);
-
-        if (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.blockTilledEndStone && state.getValue(AGE) == 7 && worldIn.rand.nextInt(50) == 0)
+        if (EnderCropConfiguration.miteChance > 0)
         {
-            EntityEndermite mite = new EntityEndermite(worldIn);
-            mite.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), MathHelper.wrapAngleTo180_float(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-            worldIn.spawnEntityInWorld(mite);
-            mite.setAttackTarget(player);
+            if (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.blockTilledEndStone && state.getValue(AGE) == 7 && worldIn.rand.nextInt(EnderCropConfiguration.miteChance) == 0)
+            {
+                EntityEndermite mite = new EntityEndermite(worldIn);
+                mite.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), MathHelper.wrapAngleTo180_float(worldIn.rand.nextFloat() * 360.0F), 0.0F);
+                worldIn.spawnEntityInWorld(mite);
+                mite.setAttackTarget(player);
+            }
         }
     }
 }
