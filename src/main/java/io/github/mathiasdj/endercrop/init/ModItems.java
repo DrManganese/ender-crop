@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModItems
 {
-    public static ItemEnderSeeds item_ender_seeds = new ItemEnderSeeds(ModBlocks.blockCropEnder, null);
+    public static final ItemEnderSeeds item_ender_seeds = new ItemEnderSeeds(ModBlocks.blockCropEnder);
 
     public static void init()
     {

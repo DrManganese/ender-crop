@@ -8,8 +8,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModBlocks
 {
-    public static BlockCropEnder blockCropEnder = new BlockCropEnder(Names.Blocks.ENDER_CROP);
-    public static BlockTilledEndStone blockTilledEndStone = new BlockTilledEndStone(Names.Blocks.TILLED_END_STONE);
+    public static final BlockCropEnder blockCropEnder = new BlockCropEnder();
+    public static final BlockTilledEndStone blockTilledEndStone = new BlockTilledEndStone();
 
     public static void init()
     {

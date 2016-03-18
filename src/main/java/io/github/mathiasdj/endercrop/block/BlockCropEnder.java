@@ -3,7 +3,7 @@ package io.github.mathiasdj.endercrop.block;
 import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
 import io.github.mathiasdj.endercrop.init.ModBlocks;
 import io.github.mathiasdj.endercrop.init.ModItems;
-import net.minecraft.block.Block;
+import io.github.mathiasdj.endercrop.reference.Names;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.monster.EntityEndermite;
@@ -13,9 +13,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -25,13 +26,13 @@ import java.util.Random;
 
 public class BlockCropEnder extends BlockCrops
 {
-    public BlockCropEnder(String unlocalizedName)
+    public BlockCropEnder()
     {
         super();
-        this.setUnlocalizedName(unlocalizedName);
+        this.setUnlocalizedName(Names.Blocks.ENDER_CROP);
     }
 
-    public boolean isOnEndstone(World worldIn, BlockPos pos)
+    private boolean isOnEndstone(World worldIn, BlockPos pos)
     {
         return worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.blockTilledEndStone;
     }
@@ -48,10 +49,11 @@ public class BlockCropEnder extends BlockCrops
         return Items.ender_pearl;
     }
 
+    //canPlaceBlockOn
     @Override
-    protected boolean canPlaceBlockOn(Block ground)
+    protected boolean func_185514_i(IBlockState state)
     {
-        return ground == Blocks.farmland || ground == ModBlocks.blockCropEnder;
+        return state.getBlock() == Blocks.farmland || state.getBlock() == ModBlocks.blockCropEnder;
     }
 
     @Override
@@ -61,9 +63,8 @@ public class BlockCropEnder extends BlockCrops
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        ItemStack heldItem = playerIn.getHeldItem();
         return heldItem == null || heldItem.getItem().equals(Items.dye);
     }
 
@@ -76,7 +77,7 @@ public class BlockCropEnder extends BlockCrops
     @Override
     public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
     {
-        return worldIn.getBlockState(pos.down()).getBlock().canSustainPlant(worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this);
+        return worldIn.getBlockState(pos.down()).getBlock().canSustainPlant(state, worldIn, pos.down(), EnumFacing.UP, this);
     }
 
     @Override
@@ -133,9 +134,9 @@ public class BlockCropEnder extends BlockCrops
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te)
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
     {
-        super.harvestBlock(worldIn, player, pos, state, te);
+        super.harvestBlock(worldIn, player, pos, state, te, stack);
         if (EnderCropConfiguration.miteChance > 0)
         {
             if (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.blockTilledEndStone && state.getValue(AGE) == 7 && worldIn.rand.nextInt(EnderCropConfiguration.miteChance) == 0)
@@ -147,4 +148,5 @@ public class BlockCropEnder extends BlockCrops
             }
         }
     }
+
 }

@@ -6,9 +6,9 @@ import net.minecraft.item.ItemSeeds;
 
 public class ItemEnderSeeds extends ItemSeeds
 {
-    public ItemEnderSeeds(Block crops, Block soil)
+    public ItemEnderSeeds(Block crops)
     {
-        super(crops, soil);
+        super(crops, null);
         this.setUnlocalizedName(Names.Items.SEEDS);
     }
 }

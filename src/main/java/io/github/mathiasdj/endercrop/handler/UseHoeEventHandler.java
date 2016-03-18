@@ -6,8 +6,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -29,12 +29,14 @@ public class UseHoeEventHandler
         Block block = state.getBlock();
 
         if (block == Blocks.end_stone) {
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, event.current) > 0 || event.entityPlayer.capabilities.isCreativeMode) {
+            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), event.current) > 0 || event.entityPlayer.capabilities.isCreativeMode) {
                 world.setBlockState(pos, ModBlocks.blockTilledEndStone.getDefaultState());
                 event.setResult(Event.Result.ALLOW);
             } else {
                 if (!world.isRemote)
-                    event.entityPlayer.addChatComponentMessage(new ChatComponentText("\u00A77\u00A7o" + "This block can only be tilled by a hoe enchanted with Unbreaking I+"));
+                    event.entityPlayer.addChatComponentMessage(new TextComponentString("\u00A77\u00A7o" + "This block can only be tilled by a hoe enchanted with Unbreaking I+")
+                    {
+                    });
             }
         }
     }

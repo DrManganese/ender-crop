@@ -1,5 +1,6 @@
 package io.github.mathiasdj.endercrop.block;
 
+import io.github.mathiasdj.endercrop.reference.Names;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.material.Material;
@@ -9,8 +10,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockPos;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -21,11 +23,10 @@ import java.util.Random;
 
 public class BlockTilledEndStone extends BlockFarmland
 {
-    public BlockTilledEndStone (String unlocalizedName)
+    public BlockTilledEndStone()
     {
         super();
-        this.setUnlocalizedName(unlocalizedName);
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.9375F, 1.0F);
+        this.setUnlocalizedName(Names.Blocks.TILLED_END_STONE);
         this.setLightOpacity(255);
         this.useNeighborBrightness = true;
         this.setHardness(0.6F);
@@ -37,13 +38,13 @@ public class BlockTilledEndStone extends BlockFarmland
     {
         int i = state.getValue(MOISTURE);
 
-        if (!this.hasWater(worldIn, pos) && !worldIn.canLightningStrike(pos.up()))
+        if (!this.hasWater(worldIn, pos) && !worldIn.isRainingAt(pos.up()))
         {
             if (i > 0)
             {
                 worldIn.setBlockState(pos, state.withProperty(MOISTURE, i - 1), 2);
             }
-            else if (!this.hasCrops(worldIn, pos))
+            else if (!this.hasCrops(state, worldIn, pos))
             {
                 worldIn.setBlockState(pos, Blocks.end_stone.getDefaultState());
             }
@@ -54,17 +55,17 @@ public class BlockTilledEndStone extends BlockFarmland
         }
     }
 
-    private boolean hasCrops(World worldIn, BlockPos pos)
+    private boolean hasCrops(IBlockState state, World worldIn, BlockPos pos)
     {
         Block block = worldIn.getBlockState(pos.up()).getBlock();
-        return block instanceof net.minecraftforge.common.IPlantable && canSustainPlant(worldIn, pos, net.minecraft.util.EnumFacing.UP, (net.minecraftforge.common.IPlantable)block);
+        return block instanceof IPlantable && canSustainPlant(state, worldIn, pos, EnumFacing.UP, (IPlantable)block);
     }
 
     private boolean hasWater(World worldIn, BlockPos pos)
     {
         for (BlockPos.MutableBlockPos blockpos$mutableblockpos : BlockPos.getAllInBoxMutable(pos.add(-4, 0, -4), pos.add(4, 1, 4)))
         {
-            if (worldIn.getBlockState(blockpos$mutableblockpos).getBlock().getMaterial() == Material.water)
+            if (worldIn.getBlockState(blockpos$mutableblockpos).getMaterial() == Material.water)
             {
                 return true;
             }
@@ -74,7 +75,7 @@ public class BlockTilledEndStone extends BlockFarmland
     }
 
     @Override
-    public boolean canSustainPlant(IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable)
+    public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable)
     {
         IBlockState plant = plantable.getPlant(world, pos.offset(direction));
         return plant.getBlock() instanceof BlockCropEnder;
@@ -85,7 +86,7 @@ public class BlockTilledEndStone extends BlockFarmland
     {
         super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
 
-        if (worldIn.getBlockState(pos.up()).getBlock().getMaterial().isSolid())
+        if (worldIn.getBlockState(pos.up()).getMaterial().isSolid())
         {
             worldIn.setBlockState(pos, Blocks.end_stone.getDefaultState());
         }
@@ -124,8 +125,8 @@ public class BlockTilledEndStone extends BlockFarmland
 
     @Override
     @SideOnly(Side.CLIENT)
-    public Item getItem(World worldIn, BlockPos pos)
+    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
-        return Item.getItemFromBlock(Blocks.end_stone);
+        return new ItemStack(Blocks.end_stone);
     }
 }
