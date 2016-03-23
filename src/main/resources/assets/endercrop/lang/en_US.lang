@@ -1,2 +1,3 @@
 item.endercrop:ender_seeds.name=Ender Seeds
 tile.endercrop:ender_crop.name=Ender Crop
+tile.endercrop:tilled_end_stone.name=Tilled End Stone

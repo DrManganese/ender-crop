@@ -1,10 +1,13 @@
 package io.github.mathiasdj.endercrop;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import io.github.mathiasdj.endercrop.handler.UseHoeEventHandler;
 import io.github.mathiasdj.endercrop.init.ModBlocks;
 import io.github.mathiasdj.endercrop.init.ModDungeonLoot;
 import io.github.mathiasdj.endercrop.init.ModItems;
@@ -31,7 +34,7 @@ public class EnderCrop
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-
+        MinecraftForge.EVENT_BUS.register(new UseHoeEventHandler());
     }
 
     @Mod.EventHandler
