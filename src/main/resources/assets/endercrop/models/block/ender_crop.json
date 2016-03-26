@@ -11,7 +11,7 @@
       "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": -45.0 },
       "faces": {
         "east": { "texture": "#crop", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
-        "west": { "texture": "#crop", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+        "west": { "texture": "#crop", "uv": [ 16.0, 0.0, 0.0, 16.0 ] }
       }
     },
     {
@@ -21,7 +21,7 @@
       "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": 45.0 },
       "faces": {
         "east": { "texture": "#crop", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
-        "west": { "texture": "#crop", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+        "west": { "texture": "#crop", "uv": [ 16.0, 0.0, 0.0, 16.0 ] }
       }
     }
   ]
