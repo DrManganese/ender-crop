@@ -1,14 +1,14 @@
 package io.github.mathiasdj.endercrop.item;
 
-import io.github.mathiasdj.endercrop.reference.Names;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemSeeds;
 
-public class ItemEnderSeeds extends ItemSeeds
-{
-    public ItemEnderSeeds(Block crops)
-    {
-        super(crops, null);
+import io.github.mathiasdj.endercrop.init.ModBlocks;
+import io.github.mathiasdj.endercrop.reference.Names;
+
+public class ItemEnderSeeds extends ItemSeeds {
+
+    public ItemEnderSeeds() {
+        super(ModBlocks.blockCropEnder, null);
         this.setUnlocalizedName(Names.Items.SEEDS);
     }
 }

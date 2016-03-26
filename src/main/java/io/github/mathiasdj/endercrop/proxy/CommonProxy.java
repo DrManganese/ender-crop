@@ -1,6 +1,5 @@
 package io.github.mathiasdj.endercrop.proxy;
 
-abstract class CommonProxy implements IProxy
-{
+abstract class CommonProxy implements IProxy {
 
 }
