@@ -1,6 +1,13 @@
 package io.github.mathiasdj.endercrop.proxy;
 
-public interface IProxy {
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-    void initRenderingAndTextures();
+public interface IProxy {
+    void preInit(FMLPreInitializationEvent event);
+
+    void init(FMLInitializationEvent event);
+
+    void postInit(FMLPostInitializationEvent event);
 }
