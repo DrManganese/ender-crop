@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -35,7 +36,8 @@ public class UseHoeEventHandler {
                 event.setResult(Event.Result.ALLOW);
             } else {
                 if (!world.isRemote)
-                    player.addChatComponentMessage(new TextComponentString("\u00A77\u00A7o" + "This block can only be tilled by a hoe enchanted with Unbreaking I+") {
+                    player.addChatComponentMessage(
+                            new TextComponentString("\u00A77\u00A7o" + I18n.translateToLocal("endercrop.alert.hoe")) {
                     });
             }
         }
