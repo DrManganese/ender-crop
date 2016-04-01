@@ -102,7 +102,7 @@ public class BlockCropEnder extends BlockCrops {
             }
 
             //10% chance to get a second pearl
-            if (rand.nextInt(10) == 0)
+            if (rand.nextInt(10) > 0)
                 pearls = 1;
             else
                 pearls = 2;
