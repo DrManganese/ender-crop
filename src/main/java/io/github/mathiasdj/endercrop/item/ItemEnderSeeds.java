@@ -14,6 +14,7 @@ public class ItemEnderSeeds extends ItemSeeds {
     public ItemEnderSeeds() {
         super(ModBlocks.blockCropEnder, null);
         this.setUnlocalizedName(Names.Items.SEEDS);
+        this.setRegistryName(Names.Items.SEEDS);
     }
 
     @Override

@@ -30,6 +30,9 @@ public class BlockCropEnder extends BlockCrops {
     public BlockCropEnder() {
         super();
         this.setUnlocalizedName(Names.Blocks.ENDER_CROP);
+        this.setRegistryName(Names.Blocks.ENDER_CROP);
+
+        ModBlocks.BLOCKS.add(this);
     }
 
     private boolean isOnEndstone(World worldIn, BlockPos pos) {

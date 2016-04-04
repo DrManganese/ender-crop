@@ -17,8 +17,8 @@ public abstract class CommonProxy implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
         EnderCropConfiguration.init(event.getSuggestedConfigurationFile());
 
+        ModBlocks.register();
         ModItems.init();
-        ModBlocks.init();
         Recipes.init();
 
         //ModDungeonLoot.init();

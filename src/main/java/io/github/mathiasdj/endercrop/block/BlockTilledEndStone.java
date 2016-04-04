@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
+import io.github.mathiasdj.endercrop.init.ModBlocks;
 import io.github.mathiasdj.endercrop.reference.Names;
 
 public class BlockTilledEndStone extends BlockFarmland {
@@ -27,10 +28,14 @@ public class BlockTilledEndStone extends BlockFarmland {
     public BlockTilledEndStone() {
         super();
         this.setUnlocalizedName(Names.Blocks.TILLED_END_STONE);
+        this.setRegistryName(Names.Blocks.TILLED_END_STONE);
+
         this.setLightOpacity(255);
         this.useNeighborBrightness = true;
         this.setHardness(0.6F);
         this.setHarvestLevel("pickaxe", 1);
+
+        ModBlocks.BLOCKS.add(this);
     }
 
     @Override
