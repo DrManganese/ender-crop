@@ -28,9 +28,18 @@ minecraft {
     mappings = mcp_mappings_version
 }
 
-dependencies {
-
+repositories {
+    //WAILA
+    maven {
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
 }
+
+dependencies {
+    deobfCompile "mcp.mobius.waila:Waila:1.7.0-B2_1.9"
+}
+
 
 processResources
 {

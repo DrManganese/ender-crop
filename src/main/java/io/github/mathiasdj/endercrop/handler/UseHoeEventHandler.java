@@ -6,6 +6,9 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
@@ -31,7 +34,13 @@ public class UseHoeEventHandler {
         Block block = state.getBlock();
 
         if (block == Blocks.end_stone) {
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), event.getCurrent()) > 0 || player.capabilities.isCreativeMode) {
+            boolean canHoe = false;
+            ItemStack[] heldItems = {player.getHeldItem(EnumHand.MAIN_HAND), player.getHeldItem(EnumHand.OFF_HAND)};
+            for (ItemStack heldItem : heldItems) {
+                if (heldItem != null && heldItem.getItem() instanceof ItemHoe)
+                    canHoe = canHoe || (EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), heldItem) > 0 || player.capabilities.isCreativeMode);
+            }
+            if (canHoe) {
                 world.setBlockState(pos, ModBlocks.blockTilledEndStone.getDefaultState());
                 event.setResult(Event.Result.ALLOW);
             } else {
