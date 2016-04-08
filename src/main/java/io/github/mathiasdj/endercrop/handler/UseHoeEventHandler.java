@@ -44,10 +44,11 @@ public class UseHoeEventHandler {
                 world.setBlockState(pos, ModBlocks.blockTilledEndStone.getDefaultState());
                 event.setResult(Event.Result.ALLOW);
             } else {
-                if (!world.isRemote)
+                if (!world.isRemote) {
                     player.addChatComponentMessage(
-                            new TextComponentString("\u00A77\u00A7o" + I18n.translateToLocal("endercrop.alert.hoe")) {
-                    });
+                            new TextComponentString("\u00A77\u00A7o" + I18n.translateToLocal("endercrop.alert.hoe"))
+                    );
+                }
             }
         }
     }
