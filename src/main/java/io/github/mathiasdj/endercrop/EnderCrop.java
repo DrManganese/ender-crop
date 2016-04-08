@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import io.github.mathiasdj.endercrop.handler.UseHoeEventHandler;
@@ -29,6 +30,7 @@ public class EnderCrop
         ModBlocks.init();
         Recipes.init();
         ModDungeonLoot.init();
+        FMLInterModComms.sendMessage("Waila", "register", "io.github.mathiasdj.endercrop.waila.WailaDataProvider.callbackRegister");
     }
 
     @Mod.EventHandler

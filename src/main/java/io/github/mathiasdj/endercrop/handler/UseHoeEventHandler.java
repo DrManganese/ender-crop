@@ -24,13 +24,12 @@ public class UseHoeEventHandler {
         Block block = world.getBlock(event.x, event.y, event.z);
 
         if (block == Blocks.end_stone) {
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, event.current) > 0 || event.entityPlayer.capabilities.isCreativeMode) {
+            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, event.current) > 0 || event.entityPlayer.capabilities.isCreativeMode) {
                 world.setBlock(event.x, event.y, event.z, ModBlocks.blockTilledEndStone);
                 event.setResult(Event.Result.ALLOW);
             } else {
                 if (!world.isRemote)
-                    event.entityPlayer.addChatComponentMessage(new ChatComponentText("\u00A77\u00A7oThis block can only be tilled by a hoe enchanted with \u00A77\u00A7oUnbreaking I+") {
-                    });
+                    event.entityPlayer.addChatComponentMessage(new ChatComponentText("\u00A77\u00A7oThis block can only be tilled by a hoe enchanted with \u00A77\u00A7oUnbreaking I+"));
             }
         }
     }
