@@ -26,12 +26,13 @@ public class ModBlocks {
         for (Block block : BLOCKS) {
             GameRegistry.register(block);
             GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
-            initModel(block);
         }
     }
 
     @SideOnly(Side.CLIENT)
-    private static void initModel(Block block) {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName().toString()));
+    public static void initModels() {
+        for (Block block : BLOCKS) {
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName().toString()));
+        }
     }
 }
