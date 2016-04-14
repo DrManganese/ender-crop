@@ -1,5 +1,6 @@
 package io.github.mathiasdj.endercrop.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.monster.EntityEndermite;
@@ -71,7 +72,8 @@ public class BlockCropEnder extends BlockCrops {
 
     @Override
     public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
-        return worldIn.getBlockState(pos.down()).getBlock().canSustainPlant(state, worldIn, pos.down(), EnumFacing.UP, this);
+        Block soil = worldIn.getBlockState(pos.down()).getBlock();
+        return soil.equals(Blocks.farmland) || soil.equals(ModBlocks.blockTilledEndStone);
     }
 
     @Override
@@ -87,10 +89,9 @@ public class BlockCropEnder extends BlockCrops {
         }
     }
 
-
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        List<ItemStack> drops = new ArrayList<ItemStack>();
+        List<ItemStack> drops = new ArrayList<>();
 
         int age = state.getValue(AGE);
         Random rand = ((World) world).rand;
