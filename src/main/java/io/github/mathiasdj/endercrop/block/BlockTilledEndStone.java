@@ -46,7 +46,7 @@ public class BlockTilledEndStone extends BlockFarmland {
             if (i > 0) {
                 worldIn.setBlockState(pos, state.withProperty(MOISTURE, i - 1), 2);
             } else if (!this.hasCrops(state, worldIn, pos)) {
-                worldIn.setBlockState(pos, Blocks.end_stone.getDefaultState());
+                worldIn.setBlockState(pos, Blocks.END_STONE.getDefaultState());
             }
         } else if (i < 7) {
             worldIn.setBlockState(pos, state.withProperty(MOISTURE, 7), 2);
@@ -60,7 +60,7 @@ public class BlockTilledEndStone extends BlockFarmland {
 
     private boolean hasWater(World worldIn, BlockPos pos) {
         for (BlockPos.MutableBlockPos blockpos$mutableblockpos : BlockPos.getAllInBoxMutable(pos.add(-4, 0, -4), pos.add(4, 1, 4))) {
-            if (worldIn.getBlockState(blockpos$mutableblockpos).getMaterial() == Material.water) {
+            if (worldIn.getBlockState(blockpos$mutableblockpos).getMaterial() == Material.WATER) {
                 return true;
             }
         }
@@ -79,7 +79,7 @@ public class BlockTilledEndStone extends BlockFarmland {
         super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
 
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, Blocks.end_stone.getDefaultState());
+            worldIn.setBlockState(pos, Blocks.END_STONE.getDefaultState());
         }
     }
 
@@ -91,7 +91,7 @@ public class BlockTilledEndStone extends BlockFarmland {
                     return;
                 }
 
-                worldIn.setBlockState(pos, Blocks.end_stone.getDefaultState());
+                worldIn.setBlockState(pos, Blocks.END_STONE.getDefaultState());
             }
 
             entityIn.fall(fallDistance, 1.0F);
@@ -105,12 +105,12 @@ public class BlockTilledEndStone extends BlockFarmland {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return Blocks.end_stone.getItemDropped(Blocks.end_stone.getDefaultState(), rand, fortune);
+        return Blocks.END_STONE.getItemDropped(Blocks.END_STONE.getDefaultState(), rand, fortune);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-        return new ItemStack(Blocks.end_stone);
+        return new ItemStack(Blocks.END_STONE);
     }
 }

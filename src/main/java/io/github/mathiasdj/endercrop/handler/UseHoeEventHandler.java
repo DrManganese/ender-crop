@@ -33,7 +33,7 @@ public class UseHoeEventHandler {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
 
-        if (block == Blocks.end_stone) {
+        if (block == Blocks.END_STONE) {
             boolean canHoe = false;
             ItemStack[] heldItems = {player.getHeldItem(EnumHand.MAIN_HAND), player.getHeldItem(EnumHand.OFF_HAND)};
             for (ItemStack heldItem : heldItems) {
@@ -41,7 +41,7 @@ public class UseHoeEventHandler {
                     canHoe = canHoe || (EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), heldItem) > 0 || player.capabilities.isCreativeMode);
             }
             if (canHoe) {
-                world.setBlockState(pos, ModBlocks.blockTilledEndStone.getDefaultState());
+                world.setBlockState(pos, ModBlocks.TILLED_END_STONE.getDefaultState());
                 event.setResult(Event.Result.ALLOW);
             } else {
                 if (!world.isRemote) {

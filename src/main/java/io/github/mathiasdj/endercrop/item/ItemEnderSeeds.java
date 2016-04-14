@@ -12,7 +12,7 @@ import io.github.mathiasdj.endercrop.reference.Names;
 public class ItemEnderSeeds extends ItemSeeds {
 
     public ItemEnderSeeds() {
-        super(ModBlocks.blockCropEnder, null);
+        super(ModBlocks.CROP_ENDER, null);
         this.setUnlocalizedName(Names.Items.SEEDS);
         this.setRegistryName(Names.Items.SEEDS);
     }

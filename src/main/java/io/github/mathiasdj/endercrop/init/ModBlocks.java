@@ -19,8 +19,8 @@ public class ModBlocks {
 
     public static final List<Block> BLOCKS = new ArrayList<>();
 
-    public static final BlockCropEnder blockCropEnder = new BlockCropEnder();
-    public static final BlockTilledEndStone blockTilledEndStone = new BlockTilledEndStone();
+    public static final BlockCropEnder CROP_ENDER = new BlockCropEnder();
+    public static final BlockTilledEndStone TILLED_END_STONE = new BlockTilledEndStone();
 
     public static void register(){
         for (Block block : BLOCKS) {

@@ -7,6 +7,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class Recipes {
 
     public static void init() {
-        GameRegistry.addShapedRecipe(new ItemStack(ModItems.item_ender_seeds), " p ", "psp", " p ", 'p', Items.ender_pearl, 's', Items.wheat_seeds);
+        GameRegistry.addShapedRecipe(new ItemStack(ModItems.ENDER_SEEDS), " p ", "psp", " p ", 'p', Items.ENDER_PEARL, 's', Items.WHEAT);
     }
 }

@@ -33,7 +33,7 @@ public class WailaDataProvider implements IWailaDataProvider
         registrar.registerBodyProvider(new WailaDataProvider(), BlockTilledEndStone.class);
 
         if (EnderCropConfiguration.tilledEndStone)
-            registrar.registerBodyProvider(new WailaDataProvider(), Blocks.end_stone.getClass());
+            registrar.registerBodyProvider(new WailaDataProvider(), Blocks.END_STONE.getClass());
     }
 
     @Override
@@ -53,7 +53,7 @@ public class WailaDataProvider implements IWailaDataProvider
     {
         if (accessor.getBlock() instanceof BlockCropEnder)
         {
-            if (accessor.getWorld().getBlockState(accessor.getPosition().down()).getBlock() == Blocks.farmland)
+            if (accessor.getWorld().getBlockState(accessor.getPosition().down()).getBlock() == Blocks.FARMLAND)
             {
                 int light = accessor.getWorld().getLightFromNeighbors(accessor.getPosition().up());
                 if (light > 7)
@@ -74,7 +74,7 @@ public class WailaDataProvider implements IWailaDataProvider
                 currenttip.set(0, SpecialChars.ITALIC + "Dry");
             }
         }
-        else if (accessor.getBlock() == Blocks.end_stone)
+        else if (accessor.getBlock() == Blocks.END_STONE)
         {
             boolean canHoe = false;
             ItemStack[] heldItems = {accessor.getPlayer().getHeldItem(EnumHand.MAIN_HAND), accessor.getPlayer().getHeldItem(EnumHand.OFF_HAND)};

@@ -37,22 +37,22 @@ public class BlockCropEnder extends BlockCrops {
     }
 
     private boolean isOnEndstone(World worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.blockTilledEndStone;
+        return worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.TILLED_END_STONE;
     }
 
     @Override
     protected Item getSeed() {
-        return ModItems.item_ender_seeds;
+        return ModItems.ENDER_SEEDS;
     }
 
     @Override
     protected Item getCrop() {
-        return Items.ender_pearl;
+        return Items.ENDER_PEARL;
     }
 
     @Override
     protected boolean canSustainBush(IBlockState state) {
-        return state.getBlock() == Blocks.farmland || state.getBlock() == ModBlocks.blockCropEnder;
+        return state.getBlock() == Blocks.FARMLAND || state.getBlock() == ModBlocks.CROP_ENDER;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class BlockCropEnder extends BlockCrops {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return heldItem == null || heldItem.getItem().equals(Items.dye);
+        return heldItem == null || heldItem.getItem().equals(Items.DYE);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class BlockCropEnder extends BlockCrops {
     @Override
     public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
         Block soil = worldIn.getBlockState(pos.down()).getBlock();
-        return soil.equals(Blocks.farmland) || soil.equals(ModBlocks.blockTilledEndStone);
+        return soil.equals(Blocks.FARMLAND) || soil.equals(ModBlocks.TILLED_END_STONE);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class BlockCropEnder extends BlockCrops {
     public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
         super.harvestBlock(worldIn, player, pos, state, te, stack);
         if (EnderCropConfiguration.miteChance > 0) {
-            if (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.blockTilledEndStone && state.getValue(AGE) == 7 && worldIn.rand.nextInt(EnderCropConfiguration.miteChance) == 0) {
+            if (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.TILLED_END_STONE && state.getValue(AGE) == 7 && worldIn.rand.nextInt(EnderCropConfiguration.miteChance) == 0) {
                 EntityEndermite mite = new EntityEndermite(worldIn);
                 mite.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
                 worldIn.spawnEntityInWorld(mite);
