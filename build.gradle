@@ -50,8 +50,7 @@ dependencies {
     deobfCompile "mezz.jei:jei_1.8.8:2.8.3.39"
 }
 
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -70,5 +69,8 @@ processResources
     }
 }
 
+jar {
+    from "LICENSE"
+}
 
 idea { module { inheritOutputDirs = true } }
