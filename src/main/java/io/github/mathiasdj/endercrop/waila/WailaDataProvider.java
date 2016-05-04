@@ -55,23 +55,24 @@ public class WailaDataProvider implements IWailaDataProvider
         {
             if (accessor.getWorld().getBlockState(accessor.getPosition().down()).getBlock() == Blocks.FARMLAND)
             {
-                int light = accessor.getWorld().getLightFromNeighbors(accessor.getPosition().up());
-                if (light > 7)
-                    currenttip.set(1, SpecialChars.RED + "Can't grow -> Light : " + light + SpecialChars.ITALIC + " (>7)");
+                if (accessor.getMetadata() / 7.0F < 1.0F) {
+                    int light = accessor.getWorld().getLightFromNeighbors(accessor.getPosition().up());
+                    if (light > 7)
+                        currenttip.clear();
+                        currenttip.add(0, SpecialChars.RED + "Can't grow -> Light : " + light + SpecialChars.ITALIC + " (>7)");
+                }
             }
         }
         else if (accessor.getBlock() instanceof BlockTilledEndStone)
         {
-            //hack for strange IndexOutOfBoundsException
             currenttip.clear();
-            currenttip.add("");
             if (accessor.getBlockState().getValue(BlockTilledEndStone.MOISTURE) == 7)
             {
-                currenttip.set(0, SpecialChars.ITALIC + "Moist");
+                currenttip.add(SpecialChars.ITALIC + "Moist");
             }
             else
             {
-                currenttip.set(0, SpecialChars.ITALIC + "Dry");
+                currenttip.add(SpecialChars.ITALIC + "Dry");
             }
         }
         else if (accessor.getBlock() == Blocks.END_STONE)
