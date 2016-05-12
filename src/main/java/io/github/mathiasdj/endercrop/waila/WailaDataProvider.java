@@ -57,9 +57,10 @@ public class WailaDataProvider implements IWailaDataProvider
             {
                 if (accessor.getMetadata() / 7.0F < 1.0F) {
                     int light = accessor.getWorld().getLightFromNeighbors(accessor.getPosition().up());
-                    if (light > 7)
+                    if (light > 7) {
                         currenttip.clear();
                         currenttip.add(0, SpecialChars.RED + "Can't grow -> Light : " + light + SpecialChars.ITALIC + " (>7)");
+                    }
                 }
             }
         }
