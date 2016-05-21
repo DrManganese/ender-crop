@@ -1,10 +1,5 @@
 package io.github.mathiasdj.endercrop.waila;
 
-import io.github.mathiasdj.endercrop.block.BlockCropEnder;
-import io.github.mathiasdj.endercrop.block.BlockTilledEndStone;
-import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
-import mcp.mobius.waila.api.*;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,10 +13,14 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class WailaDataProvider implements IWailaDataProvider
-{
-    public static void callbackRegister(IWailaRegistrar registrar)
-    {
+import io.github.mathiasdj.endercrop.block.BlockCropEnder;
+import io.github.mathiasdj.endercrop.block.BlockTilledEndStone;
+import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
+import mcp.mobius.waila.api.*;
+
+public class WailaDataProvider implements IWailaDataProvider {
+
+    public static void callbackRegister(IWailaRegistrar registrar) {
         registrar.registerStackProvider(new WailaDataProvider(), BlockCropEnder.class);
         registrar.registerStackProvider(new WailaDataProvider(), BlockTilledEndStone.class);
         registrar.registerBodyProvider(new WailaDataProvider(), BlockCropEnder.class);
@@ -32,45 +31,35 @@ public class WailaDataProvider implements IWailaDataProvider
     }
 
     @Override
-    public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
+    public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return new ItemStack(accessor.getBlockState().getBlock());
     }
 
     @Override
-    public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
+    public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return currenttip;
     }
 
     @Override
-    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        if (accessor.getBlock() instanceof BlockCropEnder)
-        {
-            if (accessor.getWorld().getBlockState(accessor.getPosition().down()).getBlock() == Blocks.farmland)
-            {
+    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        if (accessor.getBlock() instanceof BlockCropEnder) {
+            if (accessor.getWorld().getBlockState(accessor.getPosition().down()).getBlock() == Blocks.farmland) {
                 int light = accessor.getWorld().getLightFromNeighbors(accessor.getPosition().up());
-                if (light > 7)
-                    currenttip.set(1, SpecialChars.RED + "Can't grow -> Light : " + light + SpecialChars.ITALIC + " (>7)");
+                if (light > 7) {
+                    currenttip.clear();
+                    currenttip.add(SpecialChars.RED + "Can't grow -> Light : " + light + SpecialChars.ITALIC + " (>7)");
+                }
             }
-        }
-        else if (accessor.getBlock() instanceof BlockTilledEndStone)
-        {
-            if (accessor.getBlockState().getValue(BlockTilledEndStone.MOISTURE) == 7)
-            {
-                currenttip.set(0, SpecialChars.ITALIC + "Moist");
+        } else if (accessor.getBlock() instanceof BlockTilledEndStone) {
+            currenttip.clear();
+            if ((Integer) accessor.getBlockState().getValue(BlockTilledEndStone.MOISTURE) == 7) {
+                currenttip.add(SpecialChars.ITALIC + "Moist");
+            } else {
+                currenttip.add(SpecialChars.ITALIC + "Dry");
             }
-            else
-            {
-                currenttip.set(0, SpecialChars.ITALIC + "Dry");
-            }
-        }
-        else if (accessor.getBlock() == Blocks.end_stone)
-        {
+        } else if (accessor.getBlock() == Blocks.end_stone) {
             ItemStack heldItem = accessor.getPlayer().getHeldItem();
-            if (heldItem != null && heldItem.getItem() instanceof ItemHoe)
-            {
+            if (heldItem != null && heldItem.getItem() instanceof ItemHoe) {
                 if (EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, heldItem) > 0 || accessor.getPlayer().capabilities.isCreativeMode)
                     currenttip.add(SpecialChars.DGREEN + "\u2714 Can hoe");
                 else
@@ -82,14 +71,12 @@ public class WailaDataProvider implements IWailaDataProvider
     }
 
     @Override
-    public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
+    public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return currenttip;
     }
 
     @Override
-    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos)
-    {
+    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos) {
         return tag;
     }
 }

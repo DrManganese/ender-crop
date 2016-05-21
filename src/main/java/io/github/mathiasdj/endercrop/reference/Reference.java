@@ -1,8 +1,8 @@
 package io.github.mathiasdj.endercrop.reference;
 
 
-public class Reference
-{
+public class Reference {
+
     public static final String MOD_ID = "endercrop";
     public static final String MOD_NAME = "Ender Crop";
     public static final String VERSION = "1.8.9-1.2";
