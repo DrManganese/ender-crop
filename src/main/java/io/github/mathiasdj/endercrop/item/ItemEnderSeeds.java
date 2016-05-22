@@ -1,5 +1,6 @@
 package io.github.mathiasdj.endercrop.item;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
@@ -21,7 +22,7 @@ public class ItemEnderSeeds extends ItemSeeds {
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, playerIn, tooltip, advanced);
         if (stack.getItem() instanceof ItemSeeds) {
-            tooltip.add("Plant on farmland or tilled end stone");
+            tooltip.add(I18n.format("endercrop.tip.seed"));
         }
     }
 }

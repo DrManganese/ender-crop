@@ -22,8 +22,7 @@ public class LootHandler {
                 event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE) ||
                 event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON)) {
             LootPool main = event.getTable().getPool("main");
-            if (main != null)
-                main.addEntry(new LootEntryItem(ModItems.ENDER_SEEDS, EnderCropConfiguration.dungeonChance, 0, new LootFunction[0], new LootCondition[0], Reference.MOD_ID + ":seeds"));
+            main.addEntry(new LootEntryItem(ModItems.ENDER_SEEDS, EnderCropConfiguration.dungeonChance, 0, new LootFunction[0], new LootCondition[0], Reference.MOD_ID + ":seeds"));
         }
     }
 }

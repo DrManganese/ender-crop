@@ -10,8 +10,9 @@ import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -46,7 +47,7 @@ public class UseHoeEventHandler {
             } else {
                 if (!world.isRemote) {
                     player.addChatComponentMessage(
-                            new TextComponentTranslation("endercrop.alert.hoe", new TextComponentString("\u00a79"))
+                            new TextComponentTranslation("endercrop.alert.hoe").setStyle(new Style().setItalic(true).setColor(TextFormatting.GRAY))
                     );
                 }
             }

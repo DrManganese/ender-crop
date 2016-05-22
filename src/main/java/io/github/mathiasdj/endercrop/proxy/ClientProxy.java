@@ -1,6 +1,5 @@
 package io.github.mathiasdj.endercrop.proxy;
 
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import io.github.mathiasdj.endercrop.init.ModBlocks;
@@ -13,10 +12,5 @@ public class ClientProxy extends CommonProxy {
         super.preInit(event);
         ModBlocks.initModels();
         ModItems.initModels();
-    }
-
-    @Override
-    public void init(FMLInitializationEvent event) {
-        super.init(event);
     }
 }

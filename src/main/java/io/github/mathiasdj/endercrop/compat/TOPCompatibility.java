@@ -3,6 +3,7 @@ package io.github.mathiasdj.endercrop.compat;
 import com.google.common.base.Function;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.text.TextFormatting;
@@ -48,9 +49,9 @@ public class TOPCompatibility {
                     if (blockState.getBlock() instanceof BlockTilledEndStone) {
                         if (mode == ProbeMode.EXTENDED) {
                             if (blockState.getValue(BlockTilledEndStone.MOISTURE) == 7) {
-                                probeInfo.text(TextFormatting.DARK_GRAY + "Moist");
+                                probeInfo.text(TextFormatting.DARK_GRAY + I18n.format("endercrop.waila.moist"));
                             } else {
-                                probeInfo.text(TextFormatting.DARK_GRAY + "Dry");
+                                probeInfo.text(TextFormatting.DARK_GRAY + I18n.format("endercrop.waila.dry"));
                             }
                         }
 
@@ -61,16 +62,19 @@ public class TOPCompatibility {
                         float age = blockState.getValue(BlockCropEnder.AGE) / 7.0F;
 
                         if (age == 1.0F) {
-                            probeInfo.text(TextFormatting.GRAY + "Growth : Mature");
+                            probeInfo.text(TextFormatting.GRAY + I18n.format("endercrop.top.growth") + " : " + I18n.format("endercrop.top.mature"));
                         } else {
                             if (world.getBlockState(data.getPos().down()).getBlock() == Blocks.FARMLAND && !ModBlocks.CROP_ENDER.canGrow(world, data.getPos(), blockState, world.isRemote)) {
-                                probeInfo.text(TextFormatting.RED + "Can't grow");
+                                probeInfo.text(TextFormatting.RED + I18n.format("endercrop.waila.nogrowth"));
                             } else {
-                                probeInfo.text(TextFormatting.GRAY + "Growth : " + ((int) Math.floor(age*100.0)) + "%");
+                                probeInfo.text(TextFormatting.GRAY + I18n.format("endercrop.top.growth") + " : " + ((int) Math.floor(age*100.0)) + "%");
                             }
                         }
                         if (mode != ProbeMode.NORMAL) {
-                            probeInfo.text(TextFormatting.YELLOW + "Light: " + world.getLightFromNeighbors(data.getPos().up()) + TextFormatting.ITALIC + " (>7)");
+                            String text = TextFormatting.YELLOW + I18n.format("endercrop.waila.light") + ": " + world.getLightFromNeighbors(data.getPos().up());
+                            if (world.getLightFromNeighbors(data.getPos().up()) >= 7)
+                                text += TextFormatting.RED + "(>=7)";
+                            probeInfo.text(text);
                         }
                     }
                 }

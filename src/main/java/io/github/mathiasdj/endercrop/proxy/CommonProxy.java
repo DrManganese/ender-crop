@@ -3,6 +3,7 @@ package io.github.mathiasdj.endercrop.proxy;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -24,7 +25,8 @@ public abstract class CommonProxy implements IProxy {
         ModItems.init();
         Recipes.init();
 
-        //FMLInterModComms.sendMessage("Waila", "register", "io.github.mathiasdj.endercrop.compat.WailaDataProvider.callbackRegister");
+
+        FMLInterModComms.sendMessage("Waila", "register", "io.github.mathiasdj.endercrop.compat.WailaDataProvider.callbackRegister");
         if (Loader.isModLoaded("theoneprobe"))
             TOPCompatibility.register();
     }

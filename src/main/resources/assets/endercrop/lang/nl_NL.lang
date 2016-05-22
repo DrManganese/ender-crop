@@ -1,0 +1,23 @@
+# Item names
+item.ender_seeds.name=Enderzaden
+
+# Block names
+tile.ender_crop.name=Endergewas
+tile.tilled_end_stone.name=Bewerkte Endsteen
+
+# Alerts
+endercrop.alert.hoe=Deze blok kan enkel bewerkt worden met een Duurzamheid I+ schoffel
+
+# Tooltips and WAILA/TOP
+endercrop.tip.seed=Plant op akkerland of bewerkte endsteen
+
+endercrop.top.growth=Groei
+endercrop.top.mature=Volwassen
+
+endercrop.waila.light=Licht
+endercrop.waila.moist=Vochtig
+endercrop.waila.dry=Droog
+endercrop.waila.nogrowth=Kan niet groeien
+endercrop.waila.hoeable=Sarcable
+endercrop.waila.nothoeable=Pas sarcable, enchanter avec Solidité I+
+
