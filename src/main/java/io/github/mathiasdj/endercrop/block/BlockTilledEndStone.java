@@ -75,11 +75,11 @@ public class BlockTilledEndStone extends BlockFarmland {
     }
 
     @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-        super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+        super.neighborChanged(state, world, pos, block);
 
-        if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, Blocks.END_STONE.getDefaultState());
+        if (world.getBlockState(pos.up()).getMaterial().isSolid()) {
+            world.setBlockState(pos, Blocks.END_STONE.getDefaultState());
         }
     }
 

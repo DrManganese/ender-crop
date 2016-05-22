@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -17,15 +17,21 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = minecraft_version + "." + mod_version
-group = "io.github.mathiasdj"
-archivesBaseName = "endercrop"
+version = "1.0"
+group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "modid"
 
 minecraft {
-    version = minecraft_version + "-" + forge_version
+    version = "1.9.4-12.17.0.1909-1.9.4"
     runDir = "run"
-
-    mappings = mcp_mappings_version
+    
+    // the mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   snapshot are built nightly.
+    // stable_#            stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not allways work.
+    // simply re-run your setup task after changing the mappings to update your workspace.
+    mappings = "snapshot_20160518"
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
 repositories {
@@ -34,14 +40,21 @@ repositories {
         name "Mobius Repo"
         url "http://mobiusstrip.eu/maven"
     }
+    //PROBE
+    maven {
+        name "Probe Repo"
+        url "http://maven.tterrag.com"
+    }
 }
 
 dependencies {
-    deobfCompile "mcp.mobius.waila:Waila:1.7.0-B2_1.9"
+    //deobfCompile "mcp.mobius.compat:Waila:1.7.0-B2_1.9"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.9.4-0.0.1beta4-2"
 }
 
 
-processResources {
+processResources
+{
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -49,19 +62,13 @@ processResources {
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-
+                
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-
+        
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
-
-jar {
-    from "LICENSE"
-}
-
-idea { module { inheritOutputDirs = true } }
