@@ -41,7 +41,7 @@ repositories {
 
 dependencies {
     deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
-    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.9.4-0.0.1beta4-2"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.9.4-1.0.0-5"
 }
 
 

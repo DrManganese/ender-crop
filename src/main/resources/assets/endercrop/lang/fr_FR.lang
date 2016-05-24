@@ -11,9 +11,6 @@ endercrop.alert.hoe=Ce bloc ne peut être labouré que par une houe avec Solidit
 # Tooltips and WAILA/TOP
 endercrop.tip.seed=Planter sur de la Terre ou Pierre de l'End labourée
 
-endercrop.top.growth=Croissance
-endercrop.top.mature=Mature
-
 endercrop.waila.light=Lumière
 endercrop.waila.moist=Humide
 endercrop.waila.dry=Sèche

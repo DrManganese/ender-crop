@@ -61,13 +61,9 @@ public class TOPCompatibility {
                     } else if (blockState.getBlock() instanceof BlockCropEnder) {
                         float age = blockState.getValue(BlockCropEnder.AGE) / 7.0F;
 
-                        if (age == 1.0F) {
-                            probeInfo.text(TextFormatting.GRAY + I18n.format("endercrop.top.growth") + " : " + I18n.format("endercrop.top.mature"));
-                        } else {
+                        if (age < 1.0F) {
                             if (world.getBlockState(data.getPos().down()).getBlock() == Blocks.FARMLAND && !ModBlocks.CROP_ENDER.canGrow(world, data.getPos(), blockState, world.isRemote)) {
                                 probeInfo.text(TextFormatting.RED + I18n.format("endercrop.waila.nogrowth"));
-                            } else {
-                                probeInfo.text(TextFormatting.GRAY + I18n.format("endercrop.top.growth") + " : " + ((int) Math.floor(age*100.0)) + "%");
                             }
                         }
                         if (mode != ProbeMode.NORMAL) {

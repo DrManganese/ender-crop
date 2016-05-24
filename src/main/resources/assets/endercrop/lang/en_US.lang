@@ -11,9 +11,6 @@ endercrop.alert.hoe=This block can only be tilled by a hoe enchanted with Unbrea
 # Tooltips and WAILA/TOP
 endercrop.tip.seed=Plant on farmland or tilled end stone
 
-endercrop.top.growth=Growth
-endercrop.top.mature=Mature
-
 endercrop.waila.light=Light
 endercrop.waila.moist=Moist
 endercrop.waila.dry=Dry

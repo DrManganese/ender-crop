@@ -11,9 +11,6 @@ endercrop.alert.hoe=Deze blok kan enkel bewerkt worden met een Duurzamheid I+ sc
 # Tooltips and WAILA/TOP
 endercrop.tip.seed=Plant op akkerland of bewerkte endsteen
 
-endercrop.top.growth=Groei
-endercrop.top.mature=Volwassen
-
 endercrop.waila.light=Licht
 endercrop.waila.moist=Vochtig
 endercrop.waila.dry=Droog
