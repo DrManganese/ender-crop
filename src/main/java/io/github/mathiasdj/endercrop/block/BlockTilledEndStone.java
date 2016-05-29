@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -106,6 +107,14 @@ public class BlockTilledEndStone extends BlockFarmland {
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Blocks.END_STONE.getItemDropped(Blocks.END_STONE.getDefaultState(), rand, fortune);
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        if (player != null)
+            return super.getPickBlock(state, target, world, pos, player);
+        else
+            return new ItemStack(this);
     }
 
     @Override

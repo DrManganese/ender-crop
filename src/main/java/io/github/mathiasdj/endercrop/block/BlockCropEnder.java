@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -130,4 +131,11 @@ public class BlockCropEnder extends BlockCrops {
         }
     }
 
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        if (player != null)
+            return super.getPickBlock(state, target, world, pos, player);
+        else
+            return new ItemStack(this);
+    }
 }
