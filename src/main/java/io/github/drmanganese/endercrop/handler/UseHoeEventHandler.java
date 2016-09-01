@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.handler;
+package io.github.drmanganese.endercrop.handler;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +18,7 @@ import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import io.github.mathiasdj.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.init.ModBlocks;
 
 public class UseHoeEventHandler {
 

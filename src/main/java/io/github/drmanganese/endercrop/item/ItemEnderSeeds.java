@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.item;
+package io.github.drmanganese.endercrop.item;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-import io.github.mathiasdj.endercrop.init.ModBlocks;
-import io.github.mathiasdj.endercrop.reference.Names;
+import io.github.drmanganese.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.reference.Names;
 
 public class ItemEnderSeeds extends ItemSeeds {
 

@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.handler;
+package io.github.drmanganese.endercrop.handler;
 
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
@@ -8,9 +8,9 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
-import io.github.mathiasdj.endercrop.init.ModItems;
-import io.github.mathiasdj.endercrop.reference.Reference;
+import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
+import io.github.drmanganese.endercrop.init.ModItems;
+import io.github.drmanganese.endercrop.reference.Reference;
 
 public class LootHandler {
 

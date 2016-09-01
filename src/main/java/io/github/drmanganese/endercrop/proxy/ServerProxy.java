@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.proxy;
+package io.github.drmanganese.endercrop.proxy;
 
 public class ServerProxy extends CommonProxy {
 

@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.configuration;
+package io.github.drmanganese.endercrop.configuration;
 
 import net.minecraftforge.common.config.Configuration;
 
@@ -15,7 +15,7 @@ public class EnderCropConfiguration {
         config.load();
 
         tilledEndStone = config.getBoolean("tilledEndstone", Configuration.CATEGORY_GENERAL, true, "Enable Tilled End Stone");
-        miteChance = config.getInt("miteChance", Configuration.CATEGORY_GENERAL, 50, 0, 50, "Chance to spawn endermite when harvesting an Ender Erop on Tilled End Stone (1 in ...)\n0 to disable");
+        miteChance = config.getInt("miteChance", Configuration.CATEGORY_GENERAL, 50, 0, 50, "Chance to spawn endermite when harvesting an Ender Crop on Tilled End Stone (1 in ...)\n0 to disable");
         dungeonChance = config.getInt("dungeonChance", Configuration.CATEGORY_GENERAL, 1, 0, Integer.MAX_VALUE, "Ender Seed dungeon spawn weight (e.g.: 1:golden apple, 100:bread)\n0 to disable");
 
         if (config.hasChanged())

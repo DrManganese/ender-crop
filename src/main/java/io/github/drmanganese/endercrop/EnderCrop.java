@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop;
+package io.github.drmanganese.endercrop;
 
 
 import net.minecraftforge.fml.common.Mod;
@@ -7,8 +7,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import io.github.mathiasdj.endercrop.proxy.IProxy;
-import io.github.mathiasdj.endercrop.reference.Reference;
+import io.github.drmanganese.endercrop.proxy.IProxy;
+import io.github.drmanganese.endercrop.reference.Reference;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = "required-after:Forge@[12.16.1.1901,]")
 public class EnderCrop {

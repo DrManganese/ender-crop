@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.init;
+package io.github.drmanganese.endercrop.init;
 
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import io.github.mathiasdj.endercrop.item.ItemEnderSeeds;
+import io.github.drmanganese.endercrop.item.ItemEnderSeeds;
 
 public class ModItems {
 

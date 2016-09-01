@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.proxy;
+package io.github.drmanganese.endercrop.proxy;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

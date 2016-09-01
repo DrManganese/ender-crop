@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.init;
+package io.github.drmanganese.endercrop.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -12,8 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.mathiasdj.endercrop.block.BlockCropEnder;
-import io.github.mathiasdj.endercrop.block.BlockTilledEndStone;
+import io.github.drmanganese.endercrop.block.BlockCropEnder;
+import io.github.drmanganese.endercrop.block.BlockTilledEndStone;
 
 public class ModBlocks {
 

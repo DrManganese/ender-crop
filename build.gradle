@@ -15,8 +15,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = minecraft_version + "." + mod_version
-group = "io.github.mathiasdj"
+version = minecraft_version + "-" + mod_version
+group = "io.github.drmanganese"
 archivesBaseName = "endercrop"
 
 minecraft {
@@ -41,7 +41,7 @@ repositories {
 
 dependencies {
     deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
-    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.9.4-1.0.0-5"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.10-1.0.12-25"
 }
 
 

@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.compat;
+package io.github.drmanganese.endercrop.compat;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
@@ -9,15 +9,16 @@ import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import io.github.drmanganese.endercrop.block.BlockCropEnder;
+import io.github.drmanganese.endercrop.block.BlockTilledEndStone;
+import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
 
 import java.util.List;
 
-import io.github.mathiasdj.endercrop.block.BlockCropEnder;
-import io.github.mathiasdj.endercrop.block.BlockTilledEndStone;
-import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
+import javax.annotation.Nullable;
+
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -66,18 +67,8 @@ public class WailaDataProvider implements IWailaDataProvider {
                 currenttip.add(SpecialChars.ITALIC + I18n.format("endercrop.waila.dry"));
             }
         } else if (accessor.getBlock() == Blocks.END_STONE) {
-            boolean hoeInHand = false;
-            boolean canHoe = false;
-
-            ItemStack[] heldItems = {accessor.getPlayer().getHeldItem(EnumHand.MAIN_HAND), accessor.getPlayer().getHeldItem(EnumHand.OFF_HAND)};
-            for (ItemStack heldItem : heldItems) {
-                if (heldItem != null && heldItem.getItem() instanceof ItemHoe) {
-                    hoeInHand = true;
-                    canHoe = canHoe || (EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), heldItem) > 0 || accessor.getPlayer().capabilities.isCreativeMode);
-                }
-            }
-            if (hoeInHand) {
-                if (canHoe)
+            if (hoeInHand(accessor.getPlayer().getHeldItemMainhand()) || hoeInHand(accessor.getPlayer().getHeldItemOffhand())) {
+                if (accessor.getPlayer().isCreative() || canHoeEndStone(accessor.getPlayer().getHeldItemMainhand()) || canHoeEndStone(accessor.getPlayer().getHeldItemOffhand()))
                     currenttip.add(SpecialChars.DGREEN + "\u2714" + I18n.format("endercrop.waila.hoeable"));
                 else
                     currenttip.add(SpecialChars.RED + "\u2718" + I18n.format("endercrop.waila.nothoeable"));
@@ -95,5 +86,13 @@ public class WailaDataProvider implements IWailaDataProvider {
     @Override
     public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos) {
         return tag;
+    }
+
+    private boolean canHoeEndStone(@Nullable ItemStack stack) {
+        return hoeInHand(stack) && EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), stack) > 0;
+    }
+
+    private boolean hoeInHand(@Nullable ItemStack stack) {
+        return stack != null && stack.getItem() instanceof ItemHoe;
     }
 }

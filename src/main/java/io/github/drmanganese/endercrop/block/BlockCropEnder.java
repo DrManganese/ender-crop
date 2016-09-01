@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.block;
+package io.github.drmanganese.endercrop.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -22,10 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
-import io.github.mathiasdj.endercrop.init.ModBlocks;
-import io.github.mathiasdj.endercrop.init.ModItems;
-import io.github.mathiasdj.endercrop.reference.Names;
+import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
+import io.github.drmanganese.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.init.ModItems;
+import io.github.drmanganese.endercrop.reference.Names;
 
 public class BlockCropEnder extends BlockCrops {
 

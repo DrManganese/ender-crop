@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.proxy;
+package io.github.drmanganese.endercrop.proxy;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
@@ -7,13 +7,13 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import io.github.mathiasdj.endercrop.compat.TOPCompatibility;
-import io.github.mathiasdj.endercrop.configuration.EnderCropConfiguration;
-import io.github.mathiasdj.endercrop.handler.LootHandler;
-import io.github.mathiasdj.endercrop.handler.UseHoeEventHandler;
-import io.github.mathiasdj.endercrop.init.ModBlocks;
-import io.github.mathiasdj.endercrop.init.ModItems;
-import io.github.mathiasdj.endercrop.init.Recipes;
+import io.github.drmanganese.endercrop.compat.TOPCompatibility;
+import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
+import io.github.drmanganese.endercrop.handler.LootHandler;
+import io.github.drmanganese.endercrop.handler.UseHoeEventHandler;
+import io.github.drmanganese.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.init.ModItems;
+import io.github.drmanganese.endercrop.init.Recipes;
 
 public abstract class CommonProxy implements IProxy {
 

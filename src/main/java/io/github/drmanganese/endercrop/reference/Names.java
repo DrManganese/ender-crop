@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.reference;
+package io.github.drmanganese.endercrop.reference;
 
 public class Names {
 

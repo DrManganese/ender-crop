@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.init;
+package io.github.drmanganese.endercrop.init;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

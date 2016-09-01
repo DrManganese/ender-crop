@@ -1,4 +1,4 @@
-package io.github.mathiasdj.endercrop.block;
+package io.github.drmanganese.endercrop.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
@@ -21,8 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-import io.github.mathiasdj.endercrop.init.ModBlocks;
-import io.github.mathiasdj.endercrop.reference.Names;
+import io.github.drmanganese.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.reference.Names;
 
 public class BlockTilledEndStone extends BlockFarmland {
 
