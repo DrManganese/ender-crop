@@ -18,6 +18,7 @@ import io.github.drmanganese.endercrop.reference.Reference;
 
 import com.google.common.base.Function;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import mcjty.theoneprobe.api.IProbeHitData;
@@ -87,16 +88,17 @@ public class TOPCompatibility {
 
                     }
                 }
+
             });
             return null;
         }
 
-        private boolean canHoeEndStone(@Nullable ItemStack stack) {
+        private boolean canHoeEndStone(@Nonnull ItemStack stack) {
             return hoeInHand(stack) && EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), stack) > 0;
         }
 
-        private boolean hoeInHand(@Nullable ItemStack stack) {
-            return stack != null && stack.getItem() instanceof ItemHoe;
+        private boolean hoeInHand(@Nonnull ItemStack stack) {
+            return !stack.func_190926_b() && stack.getItem() instanceof ItemHoe;
         }
     }
 }

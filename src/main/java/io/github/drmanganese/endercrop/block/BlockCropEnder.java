@@ -69,7 +69,7 @@ public class BlockCropEnder extends BlockCrops {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = playerIn.getHeldItem(hand);
-        return !heldItem.func_190926_b() || heldItem.getItem().equals(Items.DYE);
+        return heldItem.func_190926_b() || heldItem.getItem().equals(Items.DYE);
     }
 
     @Override
