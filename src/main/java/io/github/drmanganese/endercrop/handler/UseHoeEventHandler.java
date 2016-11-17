@@ -38,7 +38,7 @@ public class UseHoeEventHandler {
             boolean canHoe = false;
             ItemStack[] heldItems = {player.getHeldItem(EnumHand.MAIN_HAND), player.getHeldItem(EnumHand.OFF_HAND)};
             for (ItemStack heldItem : heldItems) {
-                if (heldItem != null && heldItem.getItem() instanceof ItemHoe)
+                if (heldItem.func_190926_b() && heldItem.getItem() instanceof ItemHoe)
                     canHoe = canHoe || (EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), heldItem) > 0 || player.capabilities.isCreativeMode);
             }
             if (canHoe) {
@@ -47,8 +47,8 @@ public class UseHoeEventHandler {
             } else {
                 if (!world.isRemote) {
                     player.addChatComponentMessage(
-                            new TextComponentTranslation("endercrop.alert.hoe").setStyle(new Style().setItalic(true).setColor(TextFormatting.GRAY))
-                    );
+                            new TextComponentTranslation("endercrop.alert.hoe").setStyle(new Style().setItalic(true).setColor(TextFormatting.GRAY)),
+                    true);
                 }
             }
         }

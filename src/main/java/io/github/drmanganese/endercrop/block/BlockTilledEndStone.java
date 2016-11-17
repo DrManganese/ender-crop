@@ -16,13 +16,14 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Random;
 
 import io.github.drmanganese.endercrop.init.ModBlocks;
 import io.github.drmanganese.endercrop.reference.Names;
+
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class BlockTilledEndStone extends BlockFarmland {
 
@@ -40,9 +41,10 @@ public class BlockTilledEndStone extends BlockFarmland {
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        int i = state.getValue(MOISTURE);
+    public void updateTick(@Nullable World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        if (worldIn == null) return;
 
+        int i = state.getValue(MOISTURE);
         if (!this.hasWater(worldIn, pos) && !worldIn.isRainingAt(pos.up())) {
             if (i > 0) {
                 worldIn.setBlockState(pos, state.withProperty(MOISTURE, i - 1), 2);
@@ -70,14 +72,14 @@ public class BlockTilledEndStone extends BlockFarmland {
     }
 
     @Override
-    public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable) {
+    public boolean canSustainPlant(@Nonnull IBlockState state, @Nonnull IBlockAccess world, BlockPos pos, @Nonnull EnumFacing direction, IPlantable plantable) {
         IBlockState plant = plantable.getPlant(world, pos.offset(direction));
         return plant.getBlock() instanceof BlockCropEnder;
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
-        super.neighborChanged(state, world, pos, block);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos pos2) {
+        super.neighborChanged(state, world, pos, block, pos2);
 
         if (world.getBlockState(pos.up()).getMaterial().isSolid()) {
             world.setBlockState(pos, Blocks.END_STONE.getDefaultState());
@@ -100,26 +102,23 @@ public class BlockTilledEndStone extends BlockFarmland {
     }
 
     @Override
-    public boolean isFertile(World world, BlockPos pos) {
+    public boolean isFertile(@Nonnull World world, @Nonnull BlockPos pos) {
         return (world.getBlockState(pos).getValue(BlockTilledEndStone.MOISTURE)) > 0;
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    @Nonnull
+    public Item getItemDropped(IBlockState state, @Nullable Random rand, int fortune) {
         return Blocks.END_STONE.getItemDropped(Blocks.END_STONE.getDefaultState(), rand, fortune);
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    @Nonnull
+    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
         if (player != null)
             return super.getPickBlock(state, target, world, pos, player);
         else
             return new ItemStack(this);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-        return new ItemStack(Blocks.END_STONE);
-    }
 }

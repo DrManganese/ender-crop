@@ -18,14 +18,17 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
 import io.github.drmanganese.endercrop.init.ModBlocks;
 import io.github.drmanganese.endercrop.init.ModItems;
 import io.github.drmanganese.endercrop.reference.Names;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class BlockCropEnder extends BlockCrops {
 
@@ -42,11 +45,13 @@ public class BlockCropEnder extends BlockCrops {
     }
 
     @Override
+    @Nonnull
     protected Item getSeed() {
         return ModItems.ENDER_SEEDS;
     }
 
     @Override
+    @Nonnull
     protected Item getCrop() {
         return Items.ENDER_PEARL;
     }
@@ -62,12 +67,13 @@ public class BlockCropEnder extends BlockCrops {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return heldItem == null || heldItem.getItem().equals(Items.DYE);
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+        return !heldItem.func_190926_b() || heldItem.getItem().equals(Items.DYE);
     }
 
     @Override
-    public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
+    public boolean canGrow(World worldIn, BlockPos pos, @Nonnull IBlockState state, boolean isClient) {
         return state.getValue(AGE) < 7 && (isOnEndstone(worldIn, pos) || worldIn.getLightFromNeighbors(pos.up()) <= 7);
     }
 
@@ -78,7 +84,7 @@ public class BlockCropEnder extends BlockCrops {
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, @Nullable IBlockState state, Random rand) {
         float baseChance = (isOnEndstone(worldIn, pos)) ? 25.0F : 50.0F;
 
         if (worldIn.getLightFromNeighbors(pos.up()) <= 7 || isOnEndstone(worldIn, pos)) {
@@ -91,11 +97,12 @@ public class BlockCropEnder extends BlockCrops {
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    @Nonnull
+    public List<ItemStack> getDrops(@Nullable IBlockAccess world, @Nullable BlockPos pos, @Nonnull IBlockState state, int fortune) {
         List<ItemStack> drops = new ArrayList<>();
 
         int age = state.getValue(AGE);
-        Random rand = ((World) world).rand;
+        Random rand = world == null ? new Random() : ((World) world).rand;
 
         int pearls = 0;
         int seeds = 1;
@@ -119,7 +126,7 @@ public class BlockCropEnder extends BlockCrops {
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+    public void harvestBlock(@Nonnull World worldIn, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, TileEntity te, ItemStack stack) {
         super.harvestBlock(worldIn, player, pos, state, te, stack);
         if (EnderCropConfiguration.miteChance > 0) {
             if (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.TILLED_END_STONE && state.getValue(AGE) == 7 && worldIn.rand.nextInt(EnderCropConfiguration.miteChance) == 0) {
@@ -132,7 +139,8 @@ public class BlockCropEnder extends BlockCrops {
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    @Nonnull
+    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
         if (player != null)
             return super.getPickBlock(state, target, world, pos, player);
         else
