@@ -98,7 +98,7 @@ public class TOPCompatibility {
         }
 
         private boolean hoeInHand(@Nonnull ItemStack stack) {
-            return !stack.func_190926_b() && stack.getItem() instanceof ItemHoe;
+            return !stack.isEmpty() && stack.getItem() instanceof ItemHoe;
         }
     }
 }

@@ -69,7 +69,7 @@ public class BlockCropEnder extends BlockCrops {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = playerIn.getHeldItem(hand);
-        return heldItem.func_190926_b() || heldItem.getItem().equals(Items.DYE);
+        return !heldItem.isEmpty() || heldItem.getItem().equals(Items.DYE);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class BlockCropEnder extends BlockCrops {
             if (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.TILLED_END_STONE && state.getValue(AGE) == 7 && worldIn.rand.nextInt(EnderCropConfiguration.miteChance) == 0) {
                 EntityEndermite mite = new EntityEndermite(worldIn);
                 mite.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-                worldIn.spawnEntityInWorld(mite);
+                worldIn.spawnEntity(mite);
                 mite.setAttackTarget(player);
             }
         }
