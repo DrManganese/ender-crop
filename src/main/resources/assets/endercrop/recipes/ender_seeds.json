@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "ender_seeds"
+  },
+  "pattern": [
+    " p ",
+    "psp",
+    " p "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:ender_pearl"
+    },
+    "s": {
+      "item": "minecraft:wheat_seeds"
+    }
+  }
+}
