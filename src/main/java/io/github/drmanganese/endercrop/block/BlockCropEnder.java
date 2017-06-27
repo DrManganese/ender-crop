@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -23,8 +24,6 @@ import io.github.drmanganese.endercrop.init.ModBlocks;
 import io.github.drmanganese.endercrop.init.ModItems;
 import io.github.drmanganese.endercrop.reference.Names;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -84,7 +83,10 @@ public class BlockCropEnder extends BlockCrops {
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, @Nullable IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, @Nullable IBlockState state, @Nullable Random rand) {
+        if (state == null || rand == null)
+            return;
+
         float baseChance = (isOnEndstone(worldIn, pos)) ? 25.0F : 50.0F;
 
         if (worldIn.getLightFromNeighbors(pos.up()) <= 7 || isOnEndstone(worldIn, pos)) {
@@ -97,10 +99,7 @@ public class BlockCropEnder extends BlockCrops {
     }
 
     @Override
-    @Nonnull
-    public List<ItemStack> getDrops(@Nullable IBlockAccess world, @Nullable BlockPos pos, @Nonnull IBlockState state, int fortune) {
-        List<ItemStack> drops = new ArrayList<>();
-
+    public void getDrops(@Nonnull NonNullList<ItemStack> drops, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nonnull IBlockState state, int fortune) {
         int age = state.getValue(AGE);
         Random rand = world == null ? new Random() : ((World) world).rand;
 
@@ -122,7 +121,6 @@ public class BlockCropEnder extends BlockCrops {
 
         drops.add(new ItemStack(this.getSeed(), seeds, 0));
         drops.add(new ItemStack(this.getCrop(), pearls, 0));
-        return drops;
     }
 
     @Override
