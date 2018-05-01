@@ -1,0 +1,12 @@
+# Item names
+item.ender_seeds.name=Semillas de Ender
+
+# Block names
+tile.ender_crop.name=Cultivo de Ender
+tile.tilled_end_stone.name=Piedra del End labrada
+
+# Alerts
+endercrop.alert.hoe=Este bloque solo puede ser arado con una azada encantada con Irrompibilidad I+
+
+# Tooltips
+endercrop.tip.seed=Planta en tierra de cultivo o piedra del End labrada
