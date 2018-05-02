@@ -1,0 +1,12 @@
+# Item names
+item.ender_seeds.name=Семена края
+
+# Block names
+tile.ender_crop.name=Семя края
+tile.tilled_end_stone.name=Вспаханный эндерняк
+
+# Alerts
+endercrop.alert.hoe=Этот блок может быть вспахан только мотыгой, зачарованной на Прочность I+
+
+# Tooltips
+endercrop.tip.seed=Посадите на пашне или вспаханном эндерняке
