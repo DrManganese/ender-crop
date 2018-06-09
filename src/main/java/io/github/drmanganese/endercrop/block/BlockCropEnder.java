@@ -1,5 +1,10 @@
 package io.github.drmanganese.endercrop.block;
 
+import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
+import io.github.drmanganese.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.init.ModItems;
+import io.github.drmanganese.endercrop.reference.Names;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
@@ -15,19 +20,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
-import io.github.drmanganese.endercrop.init.ModBlocks;
-import io.github.drmanganese.endercrop.init.ModItems;
-import io.github.drmanganese.endercrop.reference.Names;
-
-import java.util.Random;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockCropEnder extends BlockCrops {
 
@@ -87,7 +85,15 @@ public class BlockCropEnder extends BlockCrops {
         if (state == null || rand == null)
             return;
 
-        float baseChance = (isOnEndstone(worldIn, pos)) ? 25.0F : 50.0F;
+        float baseChance = 25.0F;
+        if (isOnEndstone(worldIn, pos)) {
+            baseChance /= EnderCropConfiguration.tilledEndMultiplier;
+        } else {
+            baseChance /= EnderCropConfiguration.tilledSoilMultiplier;
+        }
+        ;
+
+        System.out.println(getGrowthChance(this, worldIn, pos));
 
         if (worldIn.getLightFromNeighbors(pos.up()) <= 7 || isOnEndstone(worldIn, pos)) {
             if (state.getValue(AGE) < 7) {
@@ -100,23 +106,32 @@ public class BlockCropEnder extends BlockCrops {
 
     @Override
     public void getDrops(@Nonnull NonNullList<ItemStack> drops, @Nullable IBlockAccess world, @Nullable BlockPos pos, @Nonnull IBlockState state, int fortune) {
-        int age = state.getValue(AGE);
-        Random rand = world == null ? new Random() : ((World) world).rand;
+        final int age = state.getValue(AGE);
+        final Random rand = world == null ? new Random() : ((World) world).rand;
 
         int pearls = 0;
-        int seeds = 1;
+        int seeds = 0;
+
+        // Seed chance
+        if (rand.nextInt(100) < EnderCropConfiguration.seedChance) {
+            seeds++;
+        }
 
         if (age == 7) {
-            //10% chance to get an extra seed
-            if (rand.nextInt(10) == 9) {
+            // Second seed chance
+            if (rand.nextInt(100) < EnderCropConfiguration.secondSeedChance) {
                 seeds++;
             }
 
-            //10% chance to get a second pearl
-            if (rand.nextInt(10) > 0)
-                pearls = 1;
-            else
-                pearls = 2;
+            // Pearl chance
+            if (rand.nextInt(100) < EnderCropConfiguration.pearlChance) {
+                pearls++;
+            }
+
+            // Second pearl chance
+            if (rand.nextInt(100) < EnderCropConfiguration.secondPearlChance) {
+                pearls++;
+            }
         }
 
         drops.add(new ItemStack(this.getSeed(), seeds, 0));
@@ -134,14 +149,5 @@ public class BlockCropEnder extends BlockCrops {
                 mite.setAttackTarget(player);
             }
         }
-    }
-
-    @Override
-    @Nonnull
-    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
-        if (player != null)
-            return super.getPickBlock(state, target, world, pos, player);
-        else
-            return new ItemStack(this);
     }
 }

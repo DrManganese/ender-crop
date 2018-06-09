@@ -24,8 +24,6 @@ public abstract class CommonProxy implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
 
-        EnderCropConfiguration.init(event.getSuggestedConfigurationFile());
-
         FMLInterModComms.sendMessage("Waila", "register", "io.github.mathiasdj.endercrop.compat.WailaDataProvider.callbackRegister");
         if (Loader.isModLoaded("theoneprobe"))
             TOPCompatibility.register();
