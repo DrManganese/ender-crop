@@ -1,0 +1,12 @@
+# Item names
+item.ender_seeds.name=Ender TohumlarÄ±
+
+# Block names
+tile.ender_crop.name=Ender Ekini
+tile.tilled_end_stone.name=Ä°ÅŸlenmiÅŸ End TaÅŸÄ±
+
+# Alerts
+endercrop.alert.hoe=Bu blok, sadece KÄ±rÄ±lmazlÄ±k 1 ve Ã¼stÃ¼ bulunan bir Ã§apa ile iÅŸlenebilir.
+
+# Tooltips
+endercrop.tip.seed=Ä°ÅŸlenmiÅŸ TopraÄŸa Veya Ä°ÅŸlenmiÅŸ End TaÅŸÄ±'na Ekebilirsin.
