@@ -1,0 +1,12 @@
+# Item names
+item.ender_seeds.name=Ender Tohumları
+
+# Block names
+tile.ender_crop.name=Ender Ekini
+tile.tilled_end_stone.name=İşlenmiş End Taşı
+
+# Alerts
+endercrop.alert.hoe=Bu blok, sadece Kırılmazlık 1 ve üstü bulunan bir çapa ile işlenebilir.
+
+# Tooltips
+endercrop.tip.seed=İşlenmiş Toprağa Veya İşlenmiş End Taşı'na Ekebilirsin.
