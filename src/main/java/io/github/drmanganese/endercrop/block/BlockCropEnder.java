@@ -91,9 +91,6 @@ public class BlockCropEnder extends BlockCrops {
         } else {
             baseChance /= EnderCropConfiguration.tilledSoilMultiplier;
         }
-        ;
-
-        System.out.println(getGrowthChance(this, worldIn, pos));
 
         if (worldIn.getLightFromNeighbors(pos.up()) <= 7 || isOnEndstone(worldIn, pos)) {
             if (state.getValue(AGE) < 7) {
