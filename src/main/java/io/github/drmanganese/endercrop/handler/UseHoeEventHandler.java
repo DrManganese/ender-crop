@@ -15,9 +15,12 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import io.github.drmanganese.endercrop.HoeHelper;
+import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
 import io.github.drmanganese.endercrop.init.ModBlocks;
 
 public class UseHoeEventHandler {
@@ -28,26 +31,16 @@ public class UseHoeEventHandler {
             return;
         }
 
-        EntityPlayer player = event.getEntityPlayer();
-        World world = event.getWorld();
-        BlockPos pos = event.getPos();
-        IBlockState state = world.getBlockState(pos);
-        Block block = state.getBlock();
+        final EntityPlayer player = event.getEntityPlayer();
+        final World world = event.getWorld();
+        final BlockPos pos = event.getPos();
 
-        if (block == Blocks.END_STONE) {
-            boolean canHoe = false;
-            ItemStack[] heldItems = {player.getHeldItem(EnumHand.MAIN_HAND), player.getHeldItem(EnumHand.OFF_HAND)};
-            for (ItemStack heldItem : heldItems) {
-                if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemHoe)
-                    canHoe = canHoe || (EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), heldItem) > 0 || player.capabilities.isCreativeMode);
-            }
-            if (canHoe) {
+        if (world.getBlockState(pos).getBlock() == Blocks.END_STONE) {
+            if (HoeHelper.canHoeEndstone(event.getCurrent()) || player.isCreative()) {
                 world.setBlockState(pos, ModBlocks.TILLED_END_STONE.getDefaultState());
                 event.setResult(Event.Result.ALLOW);
-            } else {
-                if (!world.isRemote) {
-                    player.sendStatusMessage(new TextComponentTranslation("endercrop.alert.hoe").setStyle(new Style().setItalic(true).setColor(TextFormatting.GRAY)), true);
-                }
+            } else if (!world.isRemote && !Loader.isModLoaded("waila") && !Loader.isModLoaded("theoneprobe")){
+                player.sendStatusMessage(new TextComponentTranslation("endercrop.alert.hoe").setStyle(new Style().setItalic(true).setColor(TextFormatting.GRAY)), true);
             }
         }
     }

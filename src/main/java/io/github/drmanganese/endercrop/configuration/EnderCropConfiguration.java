@@ -50,6 +50,15 @@ public class EnderCropConfiguration {
     @RangeInt(min = 0)
     public static int dungeonChance = 1;
 
+    @Comment({"Is a hoe enchanted with Unbreaking (I) needed to till endstone?"})
+    @Name("Tilling end stone needs unbreaking")
+    public static boolean endstoneNeedsUnbreaking = true;
+
+    @Comment({"Minimum mattock material level needed to till endstone"})
+    @Name("Minimum mattock harvest level")
+    @RangeInt(min = 0)
+    public static int mattockHarvestLevelEndstone = 1;
+
     @SubscribeEvent
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(Reference.MOD_ID)) {

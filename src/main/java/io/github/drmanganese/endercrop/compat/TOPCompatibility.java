@@ -1,31 +1,32 @@
 package io.github.drmanganese.endercrop.compat;
 
+import io.github.drmanganese.endercrop.HoeHelper;
+import io.github.drmanganese.endercrop.block.BlockCropEnder;
+import io.github.drmanganese.endercrop.block.BlockTilledEndStone;
+import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
+import io.github.drmanganese.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.reference.Reference;
+
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
-import io.github.drmanganese.endercrop.block.BlockCropEnder;
-import io.github.drmanganese.endercrop.block.BlockTilledEndStone;
-import io.github.drmanganese.endercrop.init.ModBlocks;
-import io.github.drmanganese.endercrop.reference.Reference;
-
 import com.google.common.base.Function;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
+import mcjty.theoneprobe.api.TextStyleClass;
+
+import javax.annotation.Nullable;
 
 public class TOPCompatibility {
     private static boolean registered;
@@ -39,6 +40,7 @@ public class TOPCompatibility {
 
     public static class GetTheOneProbe implements Function<ITheOneProbe, Void> {
         public static ITheOneProbe probe;
+
         @Nullable
         @Override
         public Void apply(ITheOneProbe theOneProbe) {
@@ -78,11 +80,24 @@ public class TOPCompatibility {
                             probeInfo.text(text);
                         }
                     } else if (blockState.getBlock() == Blocks.END_STONE) {
-                        if (hoeInHand(player.getHeldItemMainhand()) || hoeInHand(player.getHeldItemOffhand())) {
-                            if (player.isCreative() || canHoeEndStone(player.getHeldItemMainhand()) || canHoeEndStone(player.getHeldItemOffhand())) {
-                                probeInfo.text(TextFormatting.GREEN+ "\u2714" + "Can hoe");
+                        final ItemStack hoeStack = HoeHelper.holdingHoeTool(player);
+                        if (!hoeStack.isEmpty()) {
+                            final IProbeInfo hori = probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
+                            if (HoeHelper.canHoeEndstone(hoeStack) || player.isCreative()) {
+                                hori.icon(new ResourceLocation("theoneprobe", "textures/gui/icons.png"), 0, 16, 13, 13, probeInfo.defaultIconStyle().width(18).height(14).textureWidth(32).textureHeight(32));
+                                if (hoeStack.getItem() instanceof ItemHoe) {
+                                    hori.text(TextStyleClass.OK + "Hoe");
+                                } else {
+                                    hori.text(TextStyleClass.OK + "Mattock");
+                                }
+
                             } else {
-                                probeInfo.text(TextFormatting.RED + "\u2718" + "Can't hoe, enchant with Unbreaking I+");
+                                hori.icon(new ResourceLocation("theoneprobe", "textures/gui/icons.png"), 16, 16, 13, 13, probeInfo.defaultIconStyle().width(18).height(14).textureWidth(32).textureHeight(32));
+                                if (hoeStack.getItem() instanceof ItemHoe) {
+                                    hori.text(TextStyleClass.WARNING + "Hoe" + (EnderCropConfiguration.endstoneNeedsUnbreaking ? " (Unbreaking I+)" : ""));
+                                } else {
+                                    hori.text(TextStyleClass.WARNING + "Mattock (" + HoeHelper.getHarvestLevelName(EnderCropConfiguration.mattockHarvestLevelEndstone) + TextStyleClass.WARNING + ")");
+                                }
                             }
                         }
 
@@ -91,14 +106,6 @@ public class TOPCompatibility {
 
             });
             return null;
-        }
-
-        private boolean canHoeEndStone(@Nonnull ItemStack stack) {
-            return hoeInHand(stack) && EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(34), stack) > 0;
-        }
-
-        private boolean hoeInHand(@Nonnull ItemStack stack) {
-            return !stack.isEmpty() && stack.getItem() instanceof ItemHoe;
         }
     }
 }

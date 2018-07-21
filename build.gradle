@@ -32,12 +32,14 @@ repositories {
     maven { url "https://tehnut.info/maven" }
     maven { url "https://maven.tterrag.com" }
     maven { url "https://maven.covers1624.net" }
-
+    maven { url "https://dvs1.progwml6.com/files/maven" }
 }
 
 dependencies {
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.+"
     deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.+"
+    runtime("slimeknights:TConstruct:1.12.2-+") { transitive = false }
+    runtime "slimeknights.mantle:Mantle:1.12-+"
 }
 
 processResources {
