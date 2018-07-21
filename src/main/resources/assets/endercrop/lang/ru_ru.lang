@@ -8,5 +8,12 @@ tile.tilled_end_stone.name=Вспаханный эндерняк
 # Alerts
 endercrop.alert.hoe=Этот блок может быть вспахан только мотыгой, зачарованной на Прочность I+
 
-# Tooltips
+# Tooltips and WAILA/TOP
 endercrop.tip.seed=Посадите на пашне или вспаханном эндерняке
+endercrop.wailatop.nogrowth=Can't grow
+endercrop.wailatop.moist=Moist
+endercrop.wailatop.dry=Dry
+endercrop.wailatop.light=Light
+endercrop.waila.hoeable=Can hoe
+endercrop.waila.nothoeable=Can't till
+endercrop.top.hoe=Hoe

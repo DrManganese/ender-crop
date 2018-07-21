@@ -10,10 +10,10 @@ endercrop.alert.hoe=Ce bloc ne peut être labouré que par une houe avec Solidit
 
 # Tooltips and WAILA/TOP
 endercrop.tip.seed=Planter sur de la Terre ou Pierre de l'End labourée
-
-endercrop.waila.light=Lumière
-endercrop.waila.moist=Humide
-endercrop.waila.dry=Sèche
-endercrop.waila.nogrowth=Ne peut pas croître
+endercrop.wailatop.nogrowth=Ne peut pas croître
+endercrop.wailatop.moist=Humide
+endercrop.wailatop.dry=Sèche
+endercrop.wailatop.light=Lumière
 endercrop.waila.hoeable=Sarcable
-endercrop.waila.nothoeable=Pas sarcable, enchanter avec Solidité I+
+endercrop.waila.nothoeable=Pas sarcable
+endercrop.top.hoe=Houe

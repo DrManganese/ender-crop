@@ -8,5 +8,12 @@ tile.tilled_end_stone.name=İşlenmiş End Taşı
 # Alerts
 endercrop.alert.hoe=Bu blok, sadece Kırılmazlık 1 ve üstü bulunan bir çapa ile işlenebilir.
 
-# Tooltips
+# Tooltips and WAILA/TOP
 endercrop.tip.seed=İşlenmiş Toprağa Veya İşlenmiş End Taşı'na Ekebilirsin.
+endercrop.wailatop.nogrowth=Can't grow
+endercrop.wailatop.moist=Moist
+endercrop.wailatop.dry=Dry
+endercrop.wailatop.light=Light
+endercrop.waila.hoeable=Can hoe
+endercrop.waila.nothoeable=Can't till
+endercrop.top.hoe=Hoe

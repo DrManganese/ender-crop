@@ -25,6 +25,7 @@ import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
 import mcjty.theoneprobe.api.TextStyleClass;
+import scala.xml.Text;
 
 import javax.annotation.Nullable;
 
@@ -56,9 +57,9 @@ public class TOPCompatibility {
                     if (blockState.getBlock() instanceof BlockTilledEndStone) {
                         if (mode == ProbeMode.EXTENDED) {
                             if (blockState.getValue(BlockTilledEndStone.MOISTURE) == 7) {
-                                probeInfo.text(TextFormatting.DARK_GRAY + "Moist");
+                                probeInfo.text(TextStyleClass.LABEL + "{*endercrop.wailatop.moist*}");
                             } else {
-                                probeInfo.text(TextFormatting.DARK_GRAY + "Dry");
+                                probeInfo.text(TextStyleClass.LABEL + "{*endercrop.wailatop.dry*}");
                             }
                         }
 
@@ -70,11 +71,11 @@ public class TOPCompatibility {
 
                         if (age < 1.0F) {
                             if (world.getBlockState(data.getPos().down()).getBlock() == Blocks.FARMLAND && !ModBlocks.CROP_ENDER.canGrow(world, data.getPos(), blockState, world.isRemote)) {
-                                probeInfo.text(TextFormatting.RED + "Can't grow");
+                                probeInfo.text(TextStyleClass.ERROR + "{*endercrop.wailatop.nogrowth*}");
                             }
                         }
                         if (mode != ProbeMode.NORMAL) {
-                            String text = TextFormatting.YELLOW + "Light" + ": " + world.getLightFromNeighbors(data.getPos().up());
+                            String text = TextStyleClass.WARNING + "{*endercrop.wailatop.light*}" + ": " + world.getLightFromNeighbors(data.getPos().up());
                             if (world.getLightFromNeighbors(data.getPos().up()) >= 7)
                                 text += TextFormatting.RED + "(>=7)";
                             probeInfo.text(text);
@@ -86,7 +87,7 @@ public class TOPCompatibility {
                             if (HoeHelper.canHoeEndstone(hoeStack) || player.isCreative()) {
                                 hori.icon(new ResourceLocation("theoneprobe", "textures/gui/icons.png"), 0, 16, 13, 13, probeInfo.defaultIconStyle().width(18).height(14).textureWidth(32).textureHeight(32));
                                 if (hoeStack.getItem() instanceof ItemHoe) {
-                                    hori.text(TextStyleClass.OK + "Hoe");
+                                    hori.text(TextStyleClass.OK + "{*endercrop.top.hoe*}");
                                 } else {
                                     hori.text(TextStyleClass.OK + "Mattock");
                                 }
@@ -94,7 +95,7 @@ public class TOPCompatibility {
                             } else {
                                 hori.icon(new ResourceLocation("theoneprobe", "textures/gui/icons.png"), 16, 16, 13, 13, probeInfo.defaultIconStyle().width(18).height(14).textureWidth(32).textureHeight(32));
                                 if (hoeStack.getItem() instanceof ItemHoe) {
-                                    hori.text(TextStyleClass.WARNING + "Hoe" + (EnderCropConfiguration.endstoneNeedsUnbreaking ? " (Unbreaking I+)" : ""));
+                                    hori.text(TextStyleClass.WARNING + "{*endercrop.top.hoe*}" + (EnderCropConfiguration.endstoneNeedsUnbreaking ? " (Unbreaking I+)" : ""));
                                 } else {
                                     hori.text(TextStyleClass.WARNING + "Mattock (" + HoeHelper.getHarvestLevelName(EnderCropConfiguration.mattockHarvestLevelEndstone) + TextStyleClass.WARNING + ")");
                                 }

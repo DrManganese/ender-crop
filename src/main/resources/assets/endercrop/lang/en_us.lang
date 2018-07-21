@@ -8,5 +8,12 @@ tile.tilled_end_stone.name=Tilled End Stone
 # Alerts
 endercrop.alert.hoe=This block can only be tilled by a hoe enchanted with Unbreaking I+
 
-# Tooltips
+# Tooltips and WAILA/TOP
 endercrop.tip.seed=Plant on farmland or tilled end stone
+endercrop.wailatop.nogrowth=Can't grow
+endercrop.wailatop.moist=Moist
+endercrop.wailatop.dry=Dry
+endercrop.wailatop.light=Light
+endercrop.waila.hoeable=Can till
+endercrop.waila.nothoeable=Can't till
+endercrop.top.hoe=Hoe
