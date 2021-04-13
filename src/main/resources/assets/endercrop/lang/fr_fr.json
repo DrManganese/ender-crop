@@ -1,0 +1,14 @@
+{
+  "item.endercrop.ender_seeds": "Graines d'Ender",
+  "block.ender_crop.ender_crop": "Plante d'Ender",
+  "block.endercrop.tilled_end_stone": "Pierre de l'End labourée",
+  "endercrop.alert.hoe": "Ce bloc ne peut être labouré que par une houe avec Solidité I+",
+  "endercrop.tip.seed": "Planter sur de la Terre ou Pierre de l'End labourée",
+  "endercrop.wailatop.nogrowth": "Ne peut pas croître",
+  "endercrop.wailatop.moist": "Humide",
+  "endercrop.wailatop.dry": "Sèche",
+  "endercrop.wailatop.light": "Lumière",
+  "endercrop.waila.hoeable": "Sarcable",
+  "endercrop.waila.nothoeable": "Pas sarcable",
+  "endercrop.top.hoe": "Houe"
+}

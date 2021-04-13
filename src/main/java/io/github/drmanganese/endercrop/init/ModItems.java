@@ -1,19 +1,17 @@
 package io.github.drmanganese.endercrop.init;
 
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import io.github.drmanganese.endercrop.EnderCrop;
+import io.github.drmanganese.endercrop.item.EnderSeedsItem;
+import io.github.drmanganese.endercrop.reference.Names;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import io.github.drmanganese.endercrop.item.ItemEnderSeeds;
+public final class ModItems {
 
-public class ModItems {
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, EnderCrop.MOD_ID);
 
-    public static final ItemEnderSeeds ENDER_SEEDS = new ItemEnderSeeds();
-
-    @SideOnly(Side.CLIENT)
-    public static void initModels() {
-        ModelLoader.setCustomModelResourceLocation(ENDER_SEEDS, 0, new ModelResourceLocation(ENDER_SEEDS.getRegistryName().toString()));
-    }
+    public static final RegistryObject<Item> ENDER_SEEDS = ITEMS.register(Names.Items.SEEDS, EnderSeedsItem::new);
 }

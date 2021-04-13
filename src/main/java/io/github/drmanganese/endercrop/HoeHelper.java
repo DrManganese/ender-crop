@@ -1,14 +1,14 @@
 package io.github.drmanganese.endercrop;
 
 import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
-
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemHoe;
+import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
+import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
@@ -35,27 +35,13 @@ public final class HoeHelper {
     public static boolean canHoeEndstone(@Nonnull ItemStack itemStack) {
         final Item item = itemStack.getItem();
 
-        if (item.getToolClasses(itemStack).contains("mattock")) {
-            // If the tool is a Tinkers' Construct mattock, check if its harvest level is greater than or equal to the
-            // configurated value
-            return item.getHarvestLevel(itemStack, "mattock", null, null) >= EnderCropConfiguration.mattockHarvestLevelEndstone;
-        } else if (item instanceof ItemHoe) {
-            // If the tool is a hoe, check if it has been enchanted with unbreaking
-            // Always true when configurated to ignore
-            return EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack) > 0 || !EnderCropConfiguration.endstoneNeedsUnbreaking;
+        if (item.getToolTypes(itemStack).contains(ToolType.get("mattock"))) {
+            return item.getHarvestLevel(itemStack, ToolType.get("mattock"), null, null) >= EnderCropConfiguration.mattockHarvestLevelEndstone.get();
+        } else if (item instanceof HoeItem) {
+            return EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack) > 0 || !EnderCropConfiguration.endstoneNeedsUnbreaking.get();
         } else {
             return false;
         }
-    }
-
-    public static boolean canHoeEndstone(@Nonnull EntityPlayer player) {
-        for (EnumHand enumHand : EnumHand.values()) {
-            if (canHoeEndstone(player.getHeldItem(enumHand))) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -64,11 +50,11 @@ public final class HoeHelper {
      * @param player The player being checked
      * @return the first {@link ItemStack} which is a hoe or {@link ItemStack#EMPTY} if no hoe was found
      */
-    public static ItemStack holdingHoeTool(@Nonnull EntityPlayer player) {
-        for (EnumHand enumHand : EnumHand.values()) {
+    public static ItemStack holdingHoeTool(@Nonnull PlayerEntity player) {
+        for (Hand enumHand : Hand.values()) {
             final ItemStack itemStack = player.getHeldItem(enumHand);
             if (itemStack.isEmpty()) continue;
-            if (itemStack.getItem() instanceof ItemHoe || itemStack.getItem().getToolClasses(itemStack).contains("mattock")) {
+            if (itemStack.getItem() instanceof HoeItem || itemStack.getItem().getToolTypes(itemStack).contains(ToolType.get("mattock"))) {
                 return itemStack.copy();
             }
         }
