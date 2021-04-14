@@ -13,7 +13,7 @@ public final class EnderCropConfiguration {
     public static ForgeConfigSpec.BooleanValue tilledEndStone;
     public static ForgeConfigSpec.IntValue miteChance;
     public static ForgeConfigSpec.BooleanValue endstoneNeedsUnbreaking;
-    public static ForgeConfigSpec.IntValue mattockHarvestLevelEndstone;
+    public static ForgeConfigSpec.IntValue hoeToolHarvestLevelEndstone;
 
     static {
         final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -37,8 +37,8 @@ public final class EnderCropConfiguration {
         endstoneNeedsUnbreaking = builder
                 .comment("Is a hoe enchanted with Unbreaking (I) needed to till endstone?")
                 .define("endstoneNeedsUnbreaking", true);
-        mattockHarvestLevelEndstone = builder
-                .comment("Minimum mattock material level needed to till endstone")
-                .defineInRange("mattockHarvestLevelEndstone", 1, 0, 20);
+        hoeToolHarvestLevelEndstone = builder
+                .comment("Minimum non-vanilla hoe tool (e.g. TiCo Kama) material level needed to till endstone")
+                .defineInRange("hoeToolHarvestLevelEndstone", 1, 0, 20);
     }
 }

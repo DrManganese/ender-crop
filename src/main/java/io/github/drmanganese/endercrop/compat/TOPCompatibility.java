@@ -65,7 +65,7 @@ public final class TOPCompatibility implements Function<ITheOneProbe, Void> {
                     final ItemStack hoeStack = HoeHelper.holdingHoeTool(player);
                     if (!hoeStack.isEmpty()) {
                         final IProbeInfo hori = probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
-                        if (HoeHelper.canHoeEndstone(hoeStack) || player.isCreative()) {
+                        if (HoeHelper.canHoeEndstone(hoeStack, player, blockState)) {
                             hori.icon(new ResourceLocation("theoneprobe", "textures/gui/icons.png"), 0, 16, 13, 13, probeInfo.defaultIconStyle().width(18).height(14).textureWidth(32).textureHeight(32));
                             hori.text(CompoundText.create().ok("{*endercrop.top.hoe*}"));
                         } else {
@@ -73,7 +73,13 @@ public final class TOPCompatibility implements Function<ITheOneProbe, Void> {
                             if (hoeStack.getItem() instanceof HoeItem) {
                                 hori.text(CompoundText.create().warning("{*endercrop.top.hoe*}" + (EnderCropConfiguration.endstoneNeedsUnbreaking.get() ? " ({*enchantment.minecraft.unbreaking*} I+)" : "")));
                             } else {
-                                hori.text(CompoundText.create().warning("Mattock (" + HoeHelper.getHarvestLevelName(EnderCropConfiguration.mattockHarvestLevelEndstone.get()) + ")"));
+                                hori.text(
+                                    CompoundText.create()
+                                        .warning("{*endercrop.top.hoe*}")
+                                        .warning(" (")
+                                        .text(HoeHelper.getHarvestLevelInfo(hoeStack))
+                                        .warning(")")
+                                );
                             }
                         }
                     }
