@@ -1,28 +1,29 @@
 package io.github.drmanganese.endercrop;
 
 
+import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
+import io.github.drmanganese.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.init.ModItems;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import io.github.drmanganese.endercrop.proxy.IProxy;
-import io.github.drmanganese.endercrop.reference.Reference;
+@Mod(EnderCrop.MOD_ID)
+public final class EnderCrop {
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = "required-after:forge@[14.21.0.2375,];after:theoneprobe")
-public class EnderCrop {
+    public static final String MOD_ID = "endercrop";
 
-    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-    public static IProxy proxy;
+    public static boolean theOneProbeLoaded;
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        proxy.preInit(event);
-    }
-
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.init(event);
+    public EnderCrop() {
+        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ModItems.ITEMS.register(modEventBus);
+        ModBlocks.BLOCKS.register(modEventBus);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EnderCropConfiguration.COMMON_CONFIG);
+        theOneProbeLoaded = ModList.get().isLoaded("theoneprobe");
     }
 }
 

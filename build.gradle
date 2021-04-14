@@ -1,67 +1,86 @@
 buildscript {
     repositories {
+        maven { url = "https://files.minecraftforge.net/maven" }
+        maven { url 'https://plugins.gradle.org/m2/' }
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "4.1.+", changing: true
+        classpath group: "gradle.plugin.com.matthewprenger", name : "CurseGradle", version: "1.4.0"
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: "net.minecraftforge.gradle"
+apply plugin: "com.matthewprenger.cursegradle"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
 
 version = minecraft_version + "-" + mod_version
-group = "io.github.drmanganese"
+group = "io.github.drmanganese.endercrop"
 archivesBaseName = "endercrop"
 
 minecraft {
-    version = minecraft_version + "-" + forge_version
-    runDir = "run"
+    mappings channel: mcp_channel, version: mcp_mappings_version
+    accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
 
-    mappings = mcp_mappings_version
+    runs {
+        client {
+            workingDirectory project.file("run")
+            property "forge.logging.console.level", "debug"
+            mods {
+                endercrop {
+                    source sourceSets.main
+                }
+            }
+        }
 
-    replace '@VERSION@', project.version
+        server {
+            workingDirectory project.file("run-server")
+            property "forge.logging.console.level", "debug"
+            mods {
+                endercrop {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 repositories {
-    maven { url "https://tehnut.info/maven" }
     maven { url "https://maven.tterrag.com" }
-    maven { url "https://maven.covers1624.net" }
-    maven { url "https://dvs1.progwml6.com/files/maven" }
+    maven { url "http://dvs1.progwml6.com/files/maven" }
 }
 
 dependencies {
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.+"
-    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.+"
-    runtime("slimeknights:TConstruct:1.12.2-+") { transitive = false }
-    runtime "slimeknights.mantle:Mantle:1.12-+"
-}
-
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+    minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
+    compile fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.0.7-13") {transitive = false}
+    runtime fg.deobf("slimeknights.mantle:Mantle:1.16.5-1.6.92")
+    compile fg.deobf("slimeknights.tconstruct:TConstruct:1.16.5-3.0.2.100") {transitive = false}
 }
 
 jar {
+    manifest {
+        attributes([
+                "FMLAT": "accesstransformer.cfg",
+                "Specification-Title": "endercrop",
+                "Specification-Vendor": "DrManganese",
+                "Specification-Version": "1",
+                "Implementation-Title": project.name,
+                "Implementation-Version": getArchiveVersion(),
+                "Implementation-Vendor" :"DrManganese",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
     from "LICENSE"
 }
 
-idea { module { inheritOutputDirs = true } }
+curseforge {
+    apiKey = curseforgeToken
+    project {
+        id = "242269"
+        changelogType = "markdown"
+        changelog = file("CHANGELOG.md")
+        releaseType = "release"
+        mainArtifact jar
+    }
+}

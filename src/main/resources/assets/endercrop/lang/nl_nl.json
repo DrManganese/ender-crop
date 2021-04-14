@@ -1,0 +1,14 @@
+{
+  "item.endercrop.ender_seeds": "Enderzaden",
+  "block.ender_crop.ender_crop": "Endergewas",
+  "block.endercrop.tilled_end_stone": "Bewerkte Endsteen",
+  "endercrop.alert.hoe": "Deze blok kan enkel bewerkt worden met een Duurzamheid I+ schoffel",
+  "endercrop.tip.seed": "Plant op akkerland of bewerkte endsteen",
+  "endercrop.wailatop.nogrowth": "Kan niet groeien",
+  "endercrop.wailatop.moist": "Vochtig",
+  "endercrop.wailatop.dry": "Droog",
+  "endercrop.wailatop.light": "Licht",
+  "endercrop.waila.hoeable": "Kan woelen",
+  "endercrop.waila.nothoeable": "Kan niet woelen",
+  "endercrop.top.hoe": "Schoffel"
+}

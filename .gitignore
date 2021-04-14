@@ -1,23 +1,8 @@
-*.class
-
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-*.hprof
-
-/.gradle
-/build
-/out
-/idea
-/.idea
-/*.iml
-/*.ipr
-/*.iws
-/libs
-/classes
-/run
+.gradle/
+build/
+run/
+run-server/
+.idea/
+!/.idea/codeStyles/
+src/test/
+logs/

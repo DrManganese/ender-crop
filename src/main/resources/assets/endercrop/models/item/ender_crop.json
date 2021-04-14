@@ -1,7 +1,7 @@
 {
   "parent":"builtin/generated",
   "textures": {
-    "layer0":"endercrop:blocks/ender_crop_stage0"
+    "layer0":"endercrop:block/ender_crop_stage0"
   },
   "display": {
     "thirdperson": {

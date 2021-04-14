@@ -1,18 +1,25 @@
 package io.github.drmanganese.endercrop;
 
 import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
-
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.HoeItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 public final class HoeHelper {
 
@@ -26,36 +33,22 @@ public final class HoeHelper {
         }
     }
 
-    /**
-     * Checks if the tool in the itemstack can till end stone
-     *
-     * @param itemStack The held itemstack
-     * @return <code>true</code> if the tool can till end stone
-     */
-    public static boolean canHoeEndstone(@Nonnull ItemStack itemStack) {
+    public static boolean canHoeEndstone(@Nonnull ItemStack itemStack, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
         final Item item = itemStack.getItem();
 
-        if (item.getToolClasses(itemStack).contains("mattock")) {
-            // If the tool is a Tinkers' Construct mattock, check if its harvest level is greater than or equal to the
-            // configurated value
-            return item.getHarvestLevel(itemStack, "mattock", null, null) >= EnderCropConfiguration.mattockHarvestLevelEndstone;
-        } else if (item instanceof ItemHoe) {
-            // If the tool is a hoe, check if it has been enchanted with unbreaking
-            // Always true when configurated to ignore
-            return EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack) > 0 || !EnderCropConfiguration.endstoneNeedsUnbreaking;
-        } else {
+        if (player != null && player.isCreative())
+            return true;
+        else if (item instanceof HoeItem)
+            return EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack) > 0 || !EnderCropConfiguration.endstoneNeedsUnbreaking.get();
+        else if (isHoe(itemStack)) {
+            final int harvestLevel = item.getHarvestLevel(itemStack, ToolType.HOE, player, blockState);
+            return harvestLevel >= EnderCropConfiguration.hoeToolHarvestLevelEndstone.get();
+        } else
             return false;
-        }
     }
 
-    public static boolean canHoeEndstone(@Nonnull EntityPlayer player) {
-        for (EnumHand enumHand : EnumHand.values()) {
-            if (canHoeEndstone(player.getHeldItem(enumHand))) {
-                return true;
-            }
-        }
-
-        return false;
+    public static boolean isHoe(@Nonnull ItemStack itemStack) {
+        return itemStack.getToolTypes().contains(ToolType.HOE);
     }
 
     /**
@@ -64,28 +57,43 @@ public final class HoeHelper {
      * @param player The player being checked
      * @return the first {@link ItemStack} which is a hoe or {@link ItemStack#EMPTY} if no hoe was found
      */
-    public static ItemStack holdingHoeTool(@Nonnull EntityPlayer player) {
-        for (EnumHand enumHand : EnumHand.values()) {
+    public static ItemStack holdingHoeTool(@Nonnull PlayerEntity player) {
+        for (Hand enumHand : Hand.values()) {
             final ItemStack itemStack = player.getHeldItem(enumHand);
-            if (itemStack.isEmpty()) continue;
-            if (itemStack.getItem() instanceof ItemHoe || itemStack.getItem().getToolClasses(itemStack).contains("mattock")) {
-                return itemStack.copy();
-            }
+            if (isHoe(itemStack)) return itemStack;
         }
 
         return ItemStack.EMPTY;
     }
 
-    public static String getHarvestLevelName(int i) {
+    // Info
+
+    public static ITextComponent getHarvestLevelInfo(ItemStack itemStack) {
+        final int requiredLevel = EnderCropConfiguration.hoeToolHarvestLevelEndstone.get();
+        final ITextComponent defaultText = new StringTextComponent(String.valueOf(requiredLevel));
+
+        if (itemStack.getItem().getRegistryName().getNamespace().equals("tconstruct"))
+            return getHarvestLevelName(requiredLevel).orElse(defaultText);
+        else
+            return defaultText;
+    }
+
+    public static Optional<ITextComponent> getHarvestLevelName(int i) {
         if (tiCoGetHarvestLevelName != null) {
             try {
-                return (String) tiCoGetHarvestLevelName.invoke(null, i);
+                return Optional.of((ITextComponent) tiCoGetHarvestLevelName.invoke(null, i));
             } catch (IllegalAccessException | InvocationTargetException e) {
                 //
             }
         }
 
-        return new String[]{"Stone", "Iron", "Diamond", "Obsidian", "Cobalt"}[i];
+        return Optional.empty();
+    }
 
+    public static IFormattableTextComponent getToolErrorMessage(ItemStack itemStack) {
+        if (itemStack.getItem() instanceof HoeItem)
+            return new TranslationTextComponent("endercrop.alert.hoe");
+        else
+            return new TranslationTextComponent("endercrop.alert.hoetool", getHarvestLevelInfo(itemStack));
     }
 }

@@ -1,112 +1,91 @@
 package io.github.drmanganese.endercrop.compat;
 
+import com.google.common.base.Function;
+import io.github.drmanganese.endercrop.EnderCrop;
 import io.github.drmanganese.endercrop.HoeHelper;
-import io.github.drmanganese.endercrop.block.BlockCropEnder;
-import io.github.drmanganese.endercrop.block.BlockTilledEndStone;
+import io.github.drmanganese.endercrop.block.EnderCropBlock;
+import io.github.drmanganese.endercrop.block.TilledEndstoneBlock;
 import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
 import io.github.drmanganese.endercrop.init.ModBlocks;
-import io.github.drmanganese.endercrop.reference.Reference;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemHoe;
+import mcjty.theoneprobe.api.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-
-import com.google.common.base.Function;
-import mcjty.theoneprobe.api.ElementAlignment;
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.IProbeInfoProvider;
-import mcjty.theoneprobe.api.ITheOneProbe;
-import mcjty.theoneprobe.api.ProbeMode;
-import mcjty.theoneprobe.api.TextStyleClass;
-import scala.xml.Text;
+import net.minecraftforge.fml.InterModComms;
 
 import javax.annotation.Nullable;
 
-public class TOPCompatibility {
-    private static boolean registered;
+public final class TOPCompatibility implements Function<ITheOneProbe, Void> {
+    public static ITheOneProbe probe;
 
     public static void register() {
-        if (registered)
-            return;
-        registered = true;
-        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "io.github.drmanganese.endercrop.compat.TOPCompatibility$GetTheOneProbe");
+        InterModComms.sendTo("theoneprobe", "GetTheOneProbe", TOPCompatibility::new);
     }
 
-    public static class GetTheOneProbe implements Function<ITheOneProbe, Void> {
-        public static ITheOneProbe probe;
+    @Nullable
+    @Override
+    public Void apply(ITheOneProbe theOneProbe) {
+        probe = theOneProbe;
+        probe.registerProvider(new IProbeInfoProvider() {
+            @Override
+            public String getID() {
+                return EnderCrop.MOD_ID;
+            }
 
-        @Nullable
-        @Override
-        public Void apply(ITheOneProbe theOneProbe) {
-            probe = theOneProbe;
-            probe.registerProvider(new IProbeInfoProvider() {
-                @Override
-                public String getID() {
-                    return Reference.MOD_ID;
-                }
+            @Override
+            public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
+                if (blockState.matchesBlock(ModBlocks.TILLED_END_STONE.get())) {
+                    if (mode == ProbeMode.EXTENDED) {
+                        if (blockState.get(TilledEndstoneBlock.MOISTURE) == 7) {
+                            probeInfo.text(CompoundText.create().label("{*endercrop.wailatop.moist*}"));
+                        } else {
+                            probeInfo.text(CompoundText.create().label("{*endercrop.wailatop.dry*}"));
+                        }
+                    }
+                    if (mode == ProbeMode.DEBUG) {
+                        probeInfo.text(CompoundText.create().labelInfo("MOISTURE: ", blockState.get(TilledEndstoneBlock.MOISTURE)));
+                    }
+                } else if (blockState.matchesBlock(ModBlocks.ENDER_CROP.get())) {
+                    final EnderCropBlock enderCrop = (EnderCropBlock) blockState.getBlock();
 
-                @Override
-                public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
-                    if (blockState.getBlock() instanceof BlockTilledEndStone) {
-                        if (mode == ProbeMode.EXTENDED) {
-                            if (blockState.getValue(BlockTilledEndStone.MOISTURE) == 7) {
-                                probeInfo.text(TextStyleClass.LABEL + "{*endercrop.wailatop.moist*}");
+                    if (!enderCrop.isMaxAge(blockState)) {
+                        if (!enderCrop.isDarkEnough(world, data.getPos())) {
+                            probeInfo.text(CompoundText.create().error("{*endercrop.wailatop.nogrowth*}"));
+                            if (mode == ProbeMode.EXTENDED) {
+                                final int lightLevel = world.getLightSubtracted(data.getPos(), 0);
+                                probeInfo.text(CompoundText.create().label("{*endercrop.wailatop.light*}: ").info(String.valueOf(lightLevel)).error(" (>7)"));
+                            }
+                        }
+                    }
+                } else if (blockState.matchesBlock(Blocks.END_STONE) && EnderCropConfiguration.tilledEndStone.get()) {
+                    final ItemStack hoeStack = HoeHelper.holdingHoeTool(player);
+                    if (!hoeStack.isEmpty()) {
+                        final IProbeInfo hori = probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
+                        if (HoeHelper.canHoeEndstone(hoeStack, player, blockState)) {
+                            hori.icon(new ResourceLocation("theoneprobe", "textures/gui/icons.png"), 0, 16, 13, 13, probeInfo.defaultIconStyle().width(18).height(14).textureWidth(32).textureHeight(32));
+                            hori.text(CompoundText.create().ok("{*endercrop.top.hoe*}"));
+                        } else {
+                            hori.icon(new ResourceLocation("theoneprobe", "textures/gui/icons.png"), 16, 16, 13, 13, probeInfo.defaultIconStyle().width(18).height(14).textureWidth(32).textureHeight(32));
+                            if (hoeStack.getItem() instanceof HoeItem) {
+                                hori.text(CompoundText.create().warning("{*endercrop.top.hoe*}" + (EnderCropConfiguration.endstoneNeedsUnbreaking.get() ? " ({*enchantment.minecraft.unbreaking*} I+)" : "")));
                             } else {
-                                probeInfo.text(TextStyleClass.LABEL + "{*endercrop.wailatop.dry*}");
+                                hori.text(
+                                    CompoundText.create()
+                                        .warning("{*endercrop.top.hoe*}")
+                                        .warning(" (")
+                                        .text(HoeHelper.getHarvestLevelInfo(hoeStack))
+                                        .warning(")")
+                                );
                             }
                         }
-
-                        if (mode == ProbeMode.DEBUG) {
-                            probeInfo.text("MOISTURE: " + blockState.getValue(BlockTilledEndStone.MOISTURE));
-                        }
-                    } else if (blockState.getBlock() == ModBlocks.CROP_ENDER) {
-                        float age = blockState.getValue(BlockCropEnder.AGE) / 7.0F;
-
-                        if (age < 1.0F) {
-                            if (world.getBlockState(data.getPos().down()).getBlock() == Blocks.FARMLAND && !ModBlocks.CROP_ENDER.canGrow(world, data.getPos(), blockState, world.isRemote)) {
-                                probeInfo.text(TextStyleClass.ERROR + "{*endercrop.wailatop.nogrowth*}");
-                            }
-                        }
-                        if (mode != ProbeMode.NORMAL) {
-                            String text = TextStyleClass.WARNING + "{*endercrop.wailatop.light*}" + ": " + world.getLightFromNeighbors(data.getPos().up());
-                            if (world.getLightFromNeighbors(data.getPos().up()) >= 7)
-                                text += TextFormatting.RED + "(>=7)";
-                            probeInfo.text(text);
-                        }
-                    } else if (blockState.getBlock() == Blocks.END_STONE) {
-                        final ItemStack hoeStack = HoeHelper.holdingHoeTool(player);
-                        if (!hoeStack.isEmpty()) {
-                            final IProbeInfo hori = probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
-                            if (HoeHelper.canHoeEndstone(hoeStack) || player.isCreative()) {
-                                hori.icon(new ResourceLocation("theoneprobe", "textures/gui/icons.png"), 0, 16, 13, 13, probeInfo.defaultIconStyle().width(18).height(14).textureWidth(32).textureHeight(32));
-                                if (hoeStack.getItem() instanceof ItemHoe) {
-                                    hori.text(TextStyleClass.OK + "{*endercrop.top.hoe*}");
-                                } else {
-                                    hori.text(TextStyleClass.OK + "Mattock");
-                                }
-
-                            } else {
-                                hori.icon(new ResourceLocation("theoneprobe", "textures/gui/icons.png"), 16, 16, 13, 13, probeInfo.defaultIconStyle().width(18).height(14).textureWidth(32).textureHeight(32));
-                                if (hoeStack.getItem() instanceof ItemHoe) {
-                                    hori.text(TextStyleClass.WARNING + "{*endercrop.top.hoe*}" + (EnderCropConfiguration.endstoneNeedsUnbreaking ? " (Unbreaking I+)" : ""));
-                                } else {
-                                    hori.text(TextStyleClass.WARNING + "Mattock (" + HoeHelper.getHarvestLevelName(EnderCropConfiguration.mattockHarvestLevelEndstone) + TextStyleClass.WARNING + ")");
-                                }
-                            }
-                        }
-
                     }
                 }
-
-            });
-            return null;
-        }
+            }
+        });
+        return null;
     }
 }

@@ -1,0 +1,14 @@
+{
+  "item.endercrop.ender_seeds": "Семена края",
+  "block.ender_crop.ender_crop": "Семя края",
+  "block.endercrop.tilled_end_stone": "Вспаханный эндерняк",
+  "endercrop.alert.hoe": "Этот блок может быть вспахан только мотыгой, зачарованной на Прочность I+",
+  "endercrop.tip.seed": "Посадите на пашне или вспаханном эндерняке",
+  "endercrop.wailatop.nogrowth": "Can't grow",
+  "endercrop.wailatop.moist": "Moist",
+  "endercrop.wailatop.dry": "Dry",
+  "endercrop.wailatop.light": "Light",
+  "endercrop.waila.hoeable": "Can till",
+  "endercrop.waila.nothoeable": "Can't till",
+  "endercrop.top.hoe": "Hoe"
+}
