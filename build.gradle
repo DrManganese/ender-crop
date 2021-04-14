@@ -26,7 +26,7 @@ minecraft {
             workingDirectory project.file("run")
             property "forge.logging.console.level", "debug"
             mods {
-                topaddons {
+                endercrop {
                     source sourceSets.main
                 }
             }
@@ -36,7 +36,7 @@ minecraft {
             workingDirectory project.file("run-server")
             property "forge.logging.console.level", "debug"
             mods {
-                topaddons {
+                endercrop {
                     source sourceSets.main
                 }
             }
@@ -71,4 +71,16 @@ jar {
         ])
     }
     from "LICENSE"
+}
+
+curseforge {
+    apiKey = curseforgeToken
+    project {
+        id = "242269"
+        changelogType = "markdown"
+        changelog = file("CHANGELOG.md")
+        releaseType = "release"
+        mainArtifact jar
+        addArtifact sourceJar
+    }
 }
