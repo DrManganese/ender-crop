@@ -7,9 +7,11 @@ buildscript {
     }
     dependencies {
         classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "4.1.+", changing: true
+        classpath group: "gradle.plugin.com.matthewprenger", name : "CurseGradle", version: "1.4.0"
     }
 }
 apply plugin: "net.minecraftforge.gradle"
+apply plugin: "com.matthewprenger.cursegradle"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
 
@@ -43,7 +45,6 @@ minecraft {
         }
     }
 }
-
 
 repositories {
     maven { url "https://maven.tterrag.com" }
@@ -81,6 +82,5 @@ curseforge {
         changelog = file("CHANGELOG.md")
         releaseType = "release"
         mainArtifact jar
-        addArtifact sourceJar
     }
 }
