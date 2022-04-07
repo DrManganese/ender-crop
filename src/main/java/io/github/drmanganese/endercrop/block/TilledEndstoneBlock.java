@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -56,6 +57,18 @@ public class TilledEndstoneBlock extends FarmBlock {
         }
     }
 
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        return !this.defaultBlockState().canSurvive(pContext.getLevel(), pContext.getClickedPos()) ? Blocks.END_STONE.defaultBlockState() : super.getStateForPlacement(pContext);
+    }
+    
+    @Override
+    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRand) {
+        if (!pState.canSurvive(pLevel, pPos)) {
+            turnToEndStone(pState, pLevel, pPos);
+        }
+    }
+    
     @Override
     public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
         final BlockState plant = plantable.getPlant(world, pos.offset(facing.getNormal()));
