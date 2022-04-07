@@ -1,31 +1,32 @@
 package io.github.drmanganese.endercrop.block;
 
 import io.github.drmanganese.endercrop.init.ModBlocks;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FarmlandBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 
 import java.util.Random;
 
-public class TilledEndstoneBlock extends FarmlandBlock {
+public class TilledEndstoneBlock extends FarmBlock {
 
-    private static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties
-            .create(Material.ROCK, MaterialColor.SAND)
-            .tickRandomly()
-            .hardnessAndResistance(0.6F)
-            .setRequiresTool()
-            .hardnessAndResistance(3.0F, 9.0F);
+    private static final Properties PROPERTIES = BlockBehaviour.Properties
+        .of(Material.STONE, MaterialColor.SAND)
+        .randomTicks()
+        .destroyTime(0.6F)
+        .requiresCorrectToolForDrops()
+        .strength(3.0F, 9.0F);
 
 
     public TilledEndstoneBlock() {
@@ -33,52 +34,39 @@ public class TilledEndstoneBlock extends FarmlandBlock {
     }
 
     @Override
-    public boolean isFertile(BlockState state, IBlockReader world, BlockPos pos) {
-        return state.matchesBlock(this) && state.get(MOISTURE) > 0;
+    public boolean isFertile(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.is(this) && state.getValue(MOISTURE) > 0;
     }
 
-    public static void turnToEndStone(BlockState state, World worldIn, BlockPos pos) {
-        worldIn.setBlockState(pos, nudgeEntitiesWithNewState(state, Blocks.END_STONE.getDefaultState(), worldIn, pos));
+    public static void turnToEndStone(BlockState pState, Level pLevel, BlockPos pPos) {
+        pLevel.setBlockAndUpdate(pPos, pushEntitiesUp(pState, Blocks.END_STONE.defaultBlockState(), pLevel, pPos));
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-        if (!state.isValidPosition(worldIn, pos)) {
-            turnToEndStone(state, worldIn, pos);
-        }
-    }
-
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        int i = state.get(MOISTURE);
-        if (!hasWater(worldIn, pos) && !worldIn.isRainingAt(pos.up())) {
+    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+        int i = pState.getValue(MOISTURE);
+        if (!isNearWater(pLevel, pPos) && !pLevel.isRainingAt(pPos.above())) {
             if (i > 0) {
-                worldIn.setBlockState(pos, state.with(MOISTURE, i - 1), 2);
-            } else if (!hasCrops(worldIn, pos)) {
-                turnToEndStone(state, worldIn, pos);
+                pLevel.setBlock(pPos, pState.setValue(MOISTURE, i - 1), 2);
+            } else if (!isUnderCrops(pLevel, pPos)) {
+                turnToEndStone(pState, pLevel, pPos);
             }
         } else if (i < 7) {
-            worldIn.setBlockState(pos, state.with(MOISTURE, 7), 2);
+            pLevel.setBlock(pPos, pState.setValue(MOISTURE, 7), 2);
         }
-
-    }
-
-    private boolean hasCrops(IBlockReader worldIn, BlockPos pos) {
-        BlockState plant = worldIn.getBlockState(pos.up());
-        BlockState state = worldIn.getBlockState(pos);
-        return plant.getBlock() instanceof net.minecraftforge.common.IPlantable && state.canSustainPlant(worldIn, pos, Direction.UP, (net.minecraftforge.common.IPlantable) plant.getBlock());
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing, IPlantable plantable) {
-        final BlockState plant = plantable.getPlant(world, pos.offset(facing));
+    public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
+        final BlockState plant = plantable.getPlant(world, pos.offset(facing.getNormal()));
         return plant.getBlock() == ModBlocks.ENDER_CROP.get();
     }
 
-    public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
-        if (!worldIn.isRemote && ForgeHooks.onFarmlandTrample(worldIn, pos, this.getDefaultState(), fallDistance, entityIn)) {
-            turnToEndStone(worldIn.getBlockState(pos), worldIn, pos);
-        }
+    @Override
+    public void fallOn(Level pLevel, BlockState pState, BlockPos pPos, Entity pEntity, float pFallDistance) {
+        if (!pLevel.isClientSide && ForgeHooks.onFarmlandTrample(pLevel, pPos, Blocks.END_STONE.defaultBlockState(), pFallDistance, pEntity))
+            turnToEndStone(pLevel.getBlockState(pPos), pLevel, pPos);
 
-        entityIn.onLivingFall(fallDistance, 1.0F);
+        pEntity.causeFallDamage(pFallDistance, 1.0F, DamageSource.FALL);
     }
 }

@@ -1,26 +1,28 @@
 buildscript {
     repositories {
-        maven { url = "https://files.minecraftforge.net/maven" }
-        maven { url 'https://plugins.gradle.org/m2/' }
-        jcenter()
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = "https://maven.parchmentmc.org"}
+        gradlePluginPortal()
         mavenCentral()
     }
     dependencies {
-        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "4.1.+", changing: true
+        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
         classpath group: "gradle.plugin.com.matthewprenger", name : "CurseGradle", version: "1.4.0"
+        classpath group: "org.parchmentmc", name: "librarian", version: "1.+"
     }
 }
 apply plugin: "net.minecraftforge.gradle"
+apply plugin: "org.parchmentmc.librarian.forgegradle"
 apply plugin: "com.matthewprenger.cursegradle"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 version = minecraft_version + "-" + mod_version
 group = "io.github.drmanganese.endercrop"
 archivesBaseName = "endercrop"
 
 minecraft {
-    mappings channel: mcp_channel, version: mcp_mappings_version
+    mappings channel: mapping_channel, version: mapping_version
     accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
 
     runs {
@@ -47,15 +49,12 @@ minecraft {
 }
 
 repositories {
-    maven { url "https://maven.tterrag.com" }
-    maven { url "http://dvs1.progwml6.com/files/maven" }
+    maven { url "https://maven.k-4u.nl" }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
-    compile fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.0.7-13") {transitive = false}
-    runtime fg.deobf("slimeknights.mantle:Mantle:1.16.5-1.6.92")
-    compile fg.deobf("slimeknights.tconstruct:TConstruct:1.16.5-3.0.2.100") {transitive = false}
+    implementation fg.deobf("mcjty.theoneprobe:theoneprobe:1.18-5.1.0-8") { transitive = false }
 }
 
 jar {
@@ -78,6 +77,7 @@ curseforge {
     apiKey = curseforgeToken
     project {
         id = "242269"
+        addGameVersion "1.18.2"
         changelogType = "markdown"
         changelog = file("CHANGELOG.md")
         releaseType = "release"

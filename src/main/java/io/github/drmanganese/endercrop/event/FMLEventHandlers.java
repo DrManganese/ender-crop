@@ -3,12 +3,12 @@ package io.github.drmanganese.endercrop.event;
 import io.github.drmanganese.endercrop.EnderCrop;
 import io.github.drmanganese.endercrop.compat.TOPCompatibility;
 import io.github.drmanganese.endercrop.init.ModBlocks;
-import net.minecraft.block.Block;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -22,14 +22,14 @@ public final class FMLEventHandlers {
     @SubscribeEvent
     public static void onRegisterItems(RegistryEvent.Register<Item> event) {
         final Block tilledEndStone = ModBlocks.TILLED_END_STONE.get();
-        final BlockItem tilledEndStoneBlockItem = new BlockItem(tilledEndStone, new Item.Properties().group(ItemGroup.DECORATIONS));
+        final BlockItem tilledEndStoneBlockItem = new BlockItem(tilledEndStone, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
         tilledEndStoneBlockItem.setRegistryName(tilledEndStone.getRegistryName());
         event.getRegistry().register(tilledEndStoneBlockItem);
     }
 
     @SubscribeEvent
     public static void onFMLClientSetup(FMLClientSetupEvent event) {
-        RenderTypeLookup.setRenderLayer(ModBlocks.ENDER_CROP.get(), RenderType.getCutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ENDER_CROP.get(), RenderType.cutout());
     }
 
     @SubscribeEvent

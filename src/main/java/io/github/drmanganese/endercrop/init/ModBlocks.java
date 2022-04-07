@@ -4,10 +4,10 @@ import io.github.drmanganese.endercrop.EnderCrop;
 import io.github.drmanganese.endercrop.block.EnderCropBlock;
 import io.github.drmanganese.endercrop.block.TilledEndstoneBlock;
 import io.github.drmanganese.endercrop.reference.Names;
-import net.minecraft.block.Block;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlocks {
 

@@ -8,13 +8,13 @@ import io.github.drmanganese.endercrop.block.TilledEndstoneBlock;
 import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
 import io.github.drmanganese.endercrop.init.ModBlocks;
 import mcjty.theoneprobe.api.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.InterModComms;
 
 import javax.annotation.Nullable;
@@ -32,36 +32,36 @@ public final class TOPCompatibility implements Function<ITheOneProbe, Void> {
         probe = theOneProbe;
         probe.registerProvider(new IProbeInfoProvider() {
             @Override
-            public String getID() {
-                return EnderCrop.MOD_ID;
+            public ResourceLocation getID() {
+                return new ResourceLocation(EnderCrop.MOD_ID);
             }
 
             @Override
-            public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data) {
-                if (blockState.matchesBlock(ModBlocks.TILLED_END_STONE.get())) {
+            public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level world, BlockState blockState, IProbeHitData data) {
+                if (blockState.is(ModBlocks.TILLED_END_STONE.get())) {
                     if (mode == ProbeMode.EXTENDED) {
-                        if (blockState.get(TilledEndstoneBlock.MOISTURE) == 7) {
+                        if (blockState.getValue(TilledEndstoneBlock.MOISTURE) == 7) {
                             probeInfo.text(CompoundText.create().label("{*endercrop.wailatop.moist*}"));
                         } else {
                             probeInfo.text(CompoundText.create().label("{*endercrop.wailatop.dry*}"));
                         }
                     }
                     if (mode == ProbeMode.DEBUG) {
-                        probeInfo.text(CompoundText.create().labelInfo("MOISTURE: ", blockState.get(TilledEndstoneBlock.MOISTURE)));
+                        probeInfo.text(CompoundText.create().labelInfo("MOISTURE: ", blockState.getValue(TilledEndstoneBlock.MOISTURE)));
                     }
-                } else if (blockState.matchesBlock(ModBlocks.ENDER_CROP.get())) {
+                } else if (blockState.is(ModBlocks.ENDER_CROP.get())) {
                     final EnderCropBlock enderCrop = (EnderCropBlock) blockState.getBlock();
 
                     if (!enderCrop.isMaxAge(blockState)) {
                         if (!enderCrop.isDarkEnough(world, data.getPos())) {
                             probeInfo.text(CompoundText.create().error("{*endercrop.wailatop.nogrowth*}"));
                             if (mode == ProbeMode.EXTENDED) {
-                                final int lightLevel = world.getLightSubtracted(data.getPos(), 0);
+                                final int lightLevel = world.getRawBrightness(data.getPos(), 0);
                                 probeInfo.text(CompoundText.create().label("{*endercrop.wailatop.light*}: ").info(String.valueOf(lightLevel)).error(" (>7)"));
                             }
                         }
                     }
-                } else if (blockState.matchesBlock(Blocks.END_STONE) && EnderCropConfiguration.tilledEndStone.get()) {
+                } else if (blockState.is(Blocks.END_STONE) && EnderCropConfiguration.tilledEndStone.get()) {
                     final ItemStack hoeStack = HoeHelper.holdingHoeTool(player);
                     if (!hoeStack.isEmpty()) {
                         final IProbeInfo hori = probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
