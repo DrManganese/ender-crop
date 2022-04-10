@@ -4,10 +4,10 @@ package io.github.drmanganese.endercrop.init;
 import io.github.drmanganese.endercrop.EnderCrop;
 import io.github.drmanganese.endercrop.item.EnderSeedsItem;
 import io.github.drmanganese.endercrop.reference.Names;
-import net.minecraft.item.Item;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public final class ModItems {
 

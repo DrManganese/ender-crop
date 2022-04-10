@@ -3,45 +3,51 @@ package io.github.drmanganese.endercrop.block;
 import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
 import io.github.drmanganese.endercrop.init.ModBlocks;
 import io.github.drmanganese.endercrop.init.ModItems;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.EndermiteEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-public class EnderCropBlock extends CropsBlock {
+public class EnderCropBlock extends CropBlock {
 
-    private static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties
-            .create(Material.PLANTS)
-            .doesNotBlockMovement()
-            .tickRandomly()
-            .zeroHardnessAndResistance()
-            .sound(SoundType.CROP);
+    private static final Properties PROPERTIES = BlockBehaviour.Properties
+        .of(Material.PLANT)
+        .noCollission()
+        .randomTicks()
+        .instabreak()
+        .sound(SoundType.CROP);
 
     public EnderCropBlock() {
         super(PROPERTIES);
     }
 
-    private static boolean isOnEndstone(IBlockReader worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.TILLED_END_STONE.get();
+    private static boolean isOnEndstone(LevelReader worldIn, BlockPos pos) {
+        return worldIn.getBlockState(pos.below()).is(ModBlocks.TILLED_END_STONE.get());
     }
 
     // Vanilla growth chance is calculated as 1 in floor(25/points) + 1.
     // For the ender crop we multiply 'points' by the appropriate multiplier.
-    protected static float getGrowthChance(Block blockIn, IBlockReader worldIn, BlockPos pos) {
-        float baseChance = CropsBlock.getGrowthChance(blockIn, worldIn, pos);
+    protected static float getGrowthSpeed(Block blockIn, Level worldIn, BlockPos pos) {
+        float baseChance = CropBlock.getGrowthSpeed(blockIn, worldIn, pos);
         if (isOnEndstone(worldIn, pos)) {
             baseChance *= EnderCropConfiguration.tilledEndMultiplier.get();
         } else {
@@ -52,65 +58,78 @@ public class EnderCropBlock extends CropsBlock {
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-        final BlockPos blockPos = pos.down();
-        if (state.getBlock() == this)
-            return worldIn.getBlockState(blockPos).canSustainPlant(worldIn, blockPos, Direction.UP, this);
-        return this.isValidGround(worldIn.getBlockState(blockPos), worldIn, blockPos);
-    }
-
-    @Override
     @Nonnull
-    protected IItemProvider getSeedsItem() {
+    protected ItemLike getBaseSeedId() {
         return ModItems.ENDER_SEEDS.get();
     }
 
     @Override
-    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return state.matchesBlock(Blocks.FARMLAND) || state.matchesBlock(ModBlocks.TILLED_END_STONE.get());
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.is(Blocks.FARMLAND) || state.is(ModBlocks.TILLED_END_STONE.get());
     }
 
     @Override
-    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+        boolean lightCheck;
+        if (isOnEndstone(pLevel, pPos))
+            lightCheck = pLevel.getRawBrightness(pPos, 0) >= 8 || pLevel.canSeeSky(pPos);
+        else
+            lightCheck = pLevel.getRawBrightness(pPos, 0) <= 7;
+
+        final BlockPos below = pPos.below();
+        if (pState.getBlock() == this) //Forge: This function is called during world gen and placement, before this block is set, so if we are not 'here' then assume it's the pre-check.
+            return lightCheck && pLevel.getBlockState(below).canSustainPlant(pLevel, below, Direction.UP, this);
+        return lightCheck && this.mayPlaceOn(pLevel.getBlockState(below), pLevel, below);
+    }
+
+    @Override
+    public boolean isValidBonemealTarget(BlockGetter pLevel, BlockPos pPos, BlockState pState, boolean pIsClient) {
         return false;
     }
 
     @Override
-    protected int getBonemealAgeIncrease(World worldIn) {
+    protected int getBonemealAgeIncrease(Level pLevel) {
         return 0;
     }
 
-    public boolean isDarkEnough(World worldIn, BlockPos pos) {
-        return isOnEndstone(worldIn, pos) || worldIn.getLightSubtracted(pos, 0) <= 7;
+    public boolean isDarkEnough(Level worldIn, BlockPos pos) {
+        return isOnEndstone(worldIn, pos) || worldIn.getRawBrightness(pos, 0) <= 7;
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        if (isDarkEnough(worldIn, pos)) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+        if (isDarkEnough(level, pos)) {
             int age = this.getAge(state);
             if (!this.isMaxAge(state)) {
-                final float growthChance = getGrowthChance(this, worldIn, pos);
-                if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
-                    worldIn.setBlockState(pos, this.withAge(age + 1), 2);
-                    ForgeHooks.onCropsGrowPost(worldIn, pos, state);
+                final float growthChance = getGrowthSpeed(this, level, pos);
+                if (ForgeHooks.onCropsGrowPre(level, pos, state, random.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
+                    level.setBlock(pos, this.getStateForAge(age + 1), 2);
+                    ForgeHooks.onCropsGrowPost(level, pos, state);
                 }
             }
         }
     }
 
     @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBlockHarvested(worldIn, pos, state, player);
-        if (worldIn.isRemote()) return;
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        final boolean destroyed = super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
 
-        if (EnderCropConfiguration.miteChance.get() > 0 && worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.TILLED_END_STONE.get() && this.isMaxAge(state)) {
-            final int roll = worldIn.rand.nextInt(EnderCropConfiguration.miteChance.get());
+        if (destroyed
+            && EnderCropConfiguration.miteChance.get() > 0
+            && isOnEndstone(level, pos)
+            && this.isMaxAge(state)) {
+            final int roll = level.random.nextInt(EnderCropConfiguration.miteChance.get());
             if (roll == 0) {
-                EndermiteEntity mite = new EndermiteEntity(EntityType.ENDERMITE, worldIn);
-                mite.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-                worldIn.addEntity(mite);
-                mite.setAttackTarget(player);
+                final Endermite mite = EntityType.ENDERMITE.create(level);
+                if (mite != null) {
+                    mite.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+                    mite.setYBodyRot(Mth.wrapDegrees(level.random.nextFloat() * 360.0F));
+                    mite.setTarget(player);
+                    level.addFreshEntity(mite);
+                }
             }
         }
+
+        return destroyed;
     }
 }
