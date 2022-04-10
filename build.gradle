@@ -80,7 +80,7 @@ curseforge {
         addGameVersion "1.18.2"
         changelogType = "markdown"
         changelog = file("CHANGELOG.md")
-        releaseType = "release"
+        releaseType = "beta"
         mainArtifact jar
     }
 }
