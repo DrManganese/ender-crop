@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[43,)"
 license="GPLv3 https://raw.githubusercontent.com/DrManganese/ender-crop/main/LICENSE"
 
 [[mods]]
@@ -12,12 +12,12 @@ description="Mod which adds an ender pearl crop."
 [[dependencies.endercrop]]
 modId="forge"
 mandatory=true
-versionRange="[40,)"
+versionRange="[43,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.endercrop]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.18.2,1.19)"
+versionRange="[1.19.2,1.20)"
 ordering="NONE"
 side="BOTH"
