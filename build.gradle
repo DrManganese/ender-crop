@@ -43,7 +43,7 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
-//    implementation fg.deobf("mcjty.theoneprobe:theoneprobe:1.18-5.1.0-8") { transitive = false }
+    implementation fg.deobf("mcjty.theoneprobe:theoneprobe:1.19-6.2.0-6") { transitive = false }
 }
 
 jar {

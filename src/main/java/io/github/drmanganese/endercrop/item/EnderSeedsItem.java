@@ -2,7 +2,6 @@ package io.github.drmanganese.endercrop.item;
 
 import io.github.drmanganese.endercrop.init.ModBlocks;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
@@ -18,6 +17,6 @@ public class EnderSeedsItem extends ItemNameBlockItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, pLevel, tooltip, flag);
-        tooltip.add(new TranslatableComponent("endercrop.tip.seed"));
+        tooltip.add(Component.translatable("endercrop.tip.seed"));
     }
 }

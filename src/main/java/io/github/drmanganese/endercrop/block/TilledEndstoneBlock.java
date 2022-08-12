@@ -4,6 +4,7 @@ import io.github.drmanganese.endercrop.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -17,8 +18,6 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
-
-import java.util.Random;
 
 public class TilledEndstoneBlock extends FarmBlock {
 
@@ -44,7 +43,7 @@ public class TilledEndstoneBlock extends FarmBlock {
     }
 
     @Override
-    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         int i = pState.getValue(MOISTURE);
         if (!isNearWater(pLevel, pPos) && !pLevel.isRainingAt(pPos.above())) {
             if (i > 0) {
@@ -63,7 +62,7 @@ public class TilledEndstoneBlock extends FarmBlock {
     }
     
     @Override
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRand) {
+    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRand) {
         if (!pState.canSurvive(pLevel, pPos)) {
             turnToEndStone(pState, pLevel, pPos);
         }
