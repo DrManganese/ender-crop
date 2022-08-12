@@ -1,16 +1,16 @@
 package io.github.drmanganese.endercrop;
 
 import io.github.drmanganese.endercrop.configuration.EnderCropConfiguration;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,7 +24,7 @@ public final class HoeHelper {
         if (player != null && player.isCreative())
             return true;
         else if (item instanceof HoeItem)
-            return EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, itemStack) > 0 || !EnderCropConfiguration.endstoneNeedsUnbreaking.get();
+            return itemStack.getEnchantmentLevel(Enchantments.UNBREAKING) > 0 || !EnderCropConfiguration.endstoneNeedsUnbreaking.get();
         else
             return false;
     }
@@ -50,24 +50,24 @@ public final class HoeHelper {
 
     // Info
 
-    public static TextComponent getHarvestLevelInfo(ItemStack itemStack) {
+    public static Component getHarvestLevelInfo(ItemStack itemStack) {
         final int requiredLevel = EnderCropConfiguration.hoeToolHarvestLevelEndstone.get();
-        final TextComponent defaultText = new TextComponent(String.valueOf(requiredLevel));
+        final Component defaultText = Component.literal(String.valueOf(requiredLevel));
 
-        if (itemStack.getItem().getRegistryName().getNamespace().equals("tconstruct"))
+        if (ForgeRegistries.ITEMS.getKey(itemStack.getItem()).getNamespace().equals("tconstruct"))
             return getHarvestLevelName(requiredLevel).orElse(defaultText);
         else
             return defaultText;
     }
 
-    public static Optional<TextComponent> getHarvestLevelName(int i) {
+    public static Optional<Component> getHarvestLevelName(int i) {
         return Optional.empty();
     }
 
-    public static TranslatableComponent getToolErrorMessage(ItemStack itemStack) {
+    public static MutableComponent getToolErrorMessage(ItemStack itemStack) {
         if (itemStack.getItem() instanceof HoeItem)
-            return new TranslatableComponent("endercrop.alert.hoe");
+            return Component.translatable("endercrop.alert.hoe");
         else
-            return new TranslatableComponent("endercrop.alert.hoetool", getHarvestLevelInfo(itemStack));
+            return Component.translatable("endercrop.alert.hoetool", getHarvestLevelInfo(itemStack));
     }
 }

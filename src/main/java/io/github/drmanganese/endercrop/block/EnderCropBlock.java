@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
 
 public class EnderCropBlock extends CropBlock {
 
@@ -97,7 +97,7 @@ public class EnderCropBlock extends CropBlock {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (isDarkEnough(level, pos)) {
             int age = this.getAge(state);
             if (!this.isMaxAge(state)) {
