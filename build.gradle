@@ -39,11 +39,13 @@ minecraft {
 
 repositories {
     maven { url "https://maven.k-4u.nl" }
+    maven { url "https://www.cursemaven.com" }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
     implementation fg.deobf("mcjty.theoneprobe:theoneprobe:1.19-6.2.0-6") { transitive = false }
+    implementation fg.deobf("curse.maven:jade-324717:3903693") { transitive = false }
 }
 
 jar {

@@ -11,5 +11,7 @@
   "endercrop.wailatop.light": "Light",
   "endercrop.waila.hoeable": "Can till",
   "endercrop.waila.nothoeable": "Can't till",
-  "endercrop.top.hoe": "Hoe"
+  "endercrop.top.hoe": "Hoe",
+  "config.jade.plugin_endercrop.endstone": "End Stone Tilling",
+  "config.jade.plugin_endercrop.endercrop": "Ender Crop Info"
 }
