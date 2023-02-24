@@ -11,7 +11,7 @@ import java.util.List;
 public class EnderSeedsItem extends ItemNameBlockItem {
 
     public EnderSeedsItem() {
-        super(ModBlocks.ENDER_CROP.get(), (new Item.Properties()).tab(CreativeModeTab.TAB_MATERIALS));
+        super(ModBlocks.ENDER_CROP.get(), new Item.Properties());
     }
 
     @Override

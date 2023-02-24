@@ -44,8 +44,8 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
-    implementation fg.deobf("mcjty.theoneprobe:theoneprobe:1.19-6.2.0-6") { transitive = false }
-    implementation fg.deobf("curse.maven:jade-324717:3903693") { transitive = false }
+    implementation fg.deobf("mcjty.theoneprobe:theoneprobe:1.19.3-7.0.0-2") { transitive = false }
+    implementation fg.deobf("curse.maven:jade-324717:4330163") { transitive = false }
 }
 
 jar {

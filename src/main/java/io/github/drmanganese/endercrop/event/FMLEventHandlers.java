@@ -3,12 +3,14 @@ package io.github.drmanganese.endercrop.event;
 import io.github.drmanganese.endercrop.EnderCrop;
 import io.github.drmanganese.endercrop.compat.TOPCompatibility;
 import io.github.drmanganese.endercrop.init.ModBlocks;
+import io.github.drmanganese.endercrop.init.ModItems;
 import io.github.drmanganese.endercrop.reference.Names;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -20,10 +22,18 @@ import net.minecraftforge.registries.RegisterEvent;
 public final class FMLEventHandlers {
 
     @SubscribeEvent
+    public static void onCreativeModeTab(CreativeModeTabEvent.BuildContents event) {
+        if (event.getTab() == CreativeModeTabs.NATURAL_BLOCKS) {
+            event.accept(ModBlocks.TILLED_END_STONE);
+            event.accept(ModItems.ENDER_SEEDS);
+        }
+    }
+
+    @SubscribeEvent
     public static void onRegister(RegisterEvent event) {
         event.register(ForgeRegistries.Keys.ITEMS, helper -> {
             final Block tilledEndStone = ModBlocks.TILLED_END_STONE.get();
-            final BlockItem tilledEndStoneBlockItem = new BlockItem(tilledEndStone, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
+            final BlockItem tilledEndStoneBlockItem = new BlockItem(tilledEndStone, new Item.Properties());
 
             helper.register(new ResourceLocation("endercrop", Names.Blocks.TILLED_END_STONE), tilledEndStoneBlockItem);
         });
