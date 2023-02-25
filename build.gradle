@@ -2,6 +2,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'com.modrinth.minotaur' version '2.+'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -64,14 +65,38 @@ jar {
     from "LICENSE"
 }
 
-curseforge {
-    apiKey = curseforgeToken
-    project {
-        id = "242269"
-        addGameVersion "1.19.2"
-        changelogType = "markdown"
-        changelog = file("CHANGELOG.md")
-        releaseType = "beta"
-        mainArtifact jar
+if (project.hasProperty("curseforgeToken")) {
+    curseforge {
+        apiKey = project.findProperty("curseforgeToken")
+        project {
+            id = "242269"
+            addGameVersion "1.19.2"
+            changelogType = "markdown"
+            changelog = file("CHANGELOG.md")
+            releaseType = "beta"
+            mainArtifact jar
+        }
+        options {
+            debug = false
+        }
     }
+}
+
+if (project.hasProperty("modrinthToken")) {
+    modrinth {
+        token = project.findProperty("modrinthToken")
+        projectId = "3oLf6Wyp"
+        versionType = "release"
+        uploadFile = jar
+        changelog = file("CHANGELOG.md").text
+        dependencies {
+            optional.project "the-one-probe"
+            optional.project "jade"
+        }
+        debugMode = false
+    }
+}
+
+task platforms (type: GradleBuild, dependsOn: jar) {
+    tasks = [ 'curseforge', 'modrinth' ]
 }
