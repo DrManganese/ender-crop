@@ -10,7 +10,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -22,8 +22,8 @@ import net.minecraftforge.registries.RegisterEvent;
 public final class FMLEventHandlers {
 
     @SubscribeEvent
-    public static void onCreativeModeTab(CreativeModeTabEvent.BuildContents event) {
-        if (event.getTab() == CreativeModeTabs.NATURAL_BLOCKS) {
+    public static void onCreativeModeTab(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             event.accept(ModBlocks.TILLED_END_STONE);
             event.accept(ModItems.ENDER_SEEDS);
         }

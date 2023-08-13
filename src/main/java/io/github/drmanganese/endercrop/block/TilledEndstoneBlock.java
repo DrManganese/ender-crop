@@ -3,30 +3,35 @@ package io.github.drmanganese.endercrop.block;
 import io.github.drmanganese.endercrop.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 
 public class TilledEndstoneBlock extends FarmBlock {
 
     private static final Properties PROPERTIES = BlockBehaviour.Properties
-        .of(Material.STONE, MaterialColor.SAND)
-        .randomTicks()
-        .destroyTime(0.6F)
-        .requiresCorrectToolForDrops()
-        .strength(3.0F, 9.0F);
+            .of()
+            .mapColor(MapColor.SAND)
+            .randomTicks()
+            .destroyTime(0.6F)
+            .requiresCorrectToolForDrops()
+            .strength(3.0F, 9.0F)
+            .sound(SoundType.GRAVEL);
 
 
     public TilledEndstoneBlock() {
@@ -48,7 +53,7 @@ public class TilledEndstoneBlock extends FarmBlock {
         if (!isNearWater(pLevel, pPos) && !pLevel.isRainingAt(pPos.above())) {
             if (i > 0) {
                 pLevel.setBlock(pPos, pState.setValue(MOISTURE, i - 1), 2);
-            } else if (!isUnderCrops(pLevel, pPos)) {
+            } else if (!shouldMaintainFarmland(pLevel, pPos)) {
                 turnToEndStone(pState, pLevel, pPos);
             }
         } else if (i < 7) {
@@ -79,6 +84,6 @@ public class TilledEndstoneBlock extends FarmBlock {
         if (!pLevel.isClientSide && ForgeHooks.onFarmlandTrample(pLevel, pPos, Blocks.END_STONE.defaultBlockState(), pFallDistance, pEntity))
             turnToEndStone(pLevel.getBlockState(pPos), pLevel, pPos);
 
-        pEntity.causeFallDamage(pFallDistance, 1.0F, DamageSource.FALL);
+        pEntity.causeFallDamage(pFallDistance, 1.0F, pLevel.damageSources().fall());
     }
 }
