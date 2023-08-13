@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
@@ -30,11 +30,12 @@ import javax.annotation.Nonnull;
 public class EnderCropBlock extends CropBlock {
 
     private static final Properties PROPERTIES = BlockBehaviour.Properties
-        .of(Material.PLANT)
-        .noCollission()
-        .randomTicks()
-        .instabreak()
-        .sound(SoundType.CROP);
+            .of()
+            .mapColor(MapColor.PLANT)
+            .noCollission()
+            .randomTicks()
+            .instabreak()
+            .sound(SoundType.CROP);
 
     public EnderCropBlock() {
         super(PROPERTIES);
