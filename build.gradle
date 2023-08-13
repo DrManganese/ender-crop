@@ -72,7 +72,7 @@ if (project.hasProperty("curseforgeToken")) {
         apiKey = project.findProperty("curseforgeToken")
         project {
             id = "242269"
-            addGameVersion "1.19.2"
+            addGameVersion project.minecraft_version
             changelogType = "markdown"
             changelog = file("CHANGELOG.md")
             releaseType = "beta"
