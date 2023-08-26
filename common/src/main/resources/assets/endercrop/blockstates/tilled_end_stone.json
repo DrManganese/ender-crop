@@ -1,0 +1,32 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "moisture=0": {
+      "model": "endercrop:block/tilled_end_stone_dry"
+    },
+    "moisture=1": {
+      "model": "endercrop:block/tilled_end_stone_dry"
+    },
+    "moisture=2": {
+      "model": "endercrop:block/tilled_end_stone_dry"
+    },
+    "moisture=3": {
+      "model": "endercrop:block/tilled_end_stone_dry"
+    },
+    "moisture=4": {
+      "model": "endercrop:block/tilled_end_stone_dry"
+    },
+    "moisture=5": {
+      "model": "endercrop:block/tilled_end_stone_dry"
+    },
+    "moisture=6": {
+      "model": "endercrop:block/tilled_end_stone_dry"
+    },
+    "moisture=7": {
+      "model": "endercrop:block/tilled_end_stone_moist"
+    }
+  }
+}

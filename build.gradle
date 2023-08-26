@@ -1,104 +1,53 @@
 plugins {
-    id 'net.neoforged.gradle' version '[6.0.13, 6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id 'com.modrinth.minotaur' version '2.+'
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.3-SNAPSHOT" apply false
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+apply plugin: 'maven-publish'
 
-version = minecraft_version + "-" + mod_version
-group = "io.github.drmanganese.endercrop"
-archivesBaseName = "endercrop"
+architectury {
+    minecraft = rootProject.minecraft_version
+}
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-    accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
+subprojects {
+    apply plugin: "dev.architectury.loom"
 
-    copyIdeResources = true
+    loom {
+        silentMojangMappingsLicense()
+    }
 
-    runs {
-        client {
-            workingDirectory project.file("run")
-            property "forge.logging.console.level", "debug"
-            mods {
-                endercrop {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file("run-server")
-            property "forge.logging.console.level", "debug"
-            mods {
-                endercrop {
-                    source sourceSets.main
-                }
-            }
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        mappings loom.layered() {
+            officialMojangMappings()
+            parchment("org.parchmentmc.data:parchment-${rootProject.minecraft_version}:${rootProject.mapping_version}@zip")
         }
     }
 }
 
-repositories {
-    maven { url "https://maven.k-4u.nl" }
-    maven { url "https://www.cursemaven.com" }
-}
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
 
-dependencies {
-    minecraft "net.neoforged:forge:$minecraft_version-$neoforged_version"
-    implementation fg.deobf("mcjty.theoneprobe:theoneprobe:1.20.1-10.0.1-3") { transitive = false }
-    compileOnly fg.deobf("curse.maven:jade-324717:4681833") { transitive = false }
-}
+    archivesBaseName = rootProject.archives_base_name
+    version = rootProject.minecraft_version + "-" + rootProject.mod_version
+    group = rootProject.group
 
-jar {
-    manifest {
-        attributes([
-                "FMLAT": "accesstransformer.cfg",
-                "Specification-Title": "endercrop",
-                "Specification-Vendor": "DrManganese",
-                "Specification-Version": "1",
-                "Implementation-Title": project.name,
-                "Implementation-Version": getArchiveVersion(),
-                "Implementation-Vendor" :"DrManganese",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
+    repositories {
+        maven { url "https://maven.parchmentmc.org/" }
+        maven { url "https://maven.neoforged.net/releases/" }
+        maven { url "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
+        maven { url "https://maven.terraformersmc.com/releases/" }
+        maven { url "https://api.modrinth.com/maven/" }
     }
-    from "LICENSE"
-}
 
-if (project.hasProperty("curseforgeToken")) {
-    curseforge {
-        apiKey = project.findProperty("curseforgeToken")
-        project {
-            id = "242269"
-            addGameVersion project.minecraft_version
-            changelogType = "markdown"
-            changelog = file("CHANGELOG.md")
-            releaseType = "beta"
-            mainArtifact jar
-        }
-        options {
-            debug = false
-        }
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.release = 17
+    }
+
+    java {
+        withSourcesJar()
     }
 }
 
-if (project.hasProperty("modrinthToken")) {
-    modrinth {
-        token = project.findProperty("modrinthToken")
-        projectId = "3oLf6Wyp"
-        versionType = "release"
-        uploadFile = jar
-        changelog = file("CHANGELOG.md").text
-        dependencies {
-            optional.project "the-one-probe"
-            optional.project "jade"
-        }
-        debugMode = false
-    }
-}
-
-task platforms (type: GradleBuild, dependsOn: jar) {
-    tasks = [ 'curseforge', 'modrinth' ]
-}
