@@ -1,0 +1,3 @@
+accessWidener v2  named
+accessible method net/minecraft/world/level/block/FarmBlock isNearWater (Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z
+accessible method net/minecraft/world/level/block/FarmBlock shouldMaintainFarmland (Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Z

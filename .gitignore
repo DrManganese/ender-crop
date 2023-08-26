@@ -4,5 +4,6 @@ run/
 run-server/
 .idea/
 !/.idea/codeStyles/
+!/.idea/icon.png
 src/test/
 logs/
