@@ -3,27 +3,27 @@ package be.mathiasdejong.endercrop.config;
 import be.mathiasdejong.endercrop.EnderCrop;
 
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.Nullable;
 
 public final class EnderCropConfiguration {
 
-    public static final ForgeConfigSpec COMMON_CONFIG;
-    public static ConfigValue<Double, ForgeConfigSpec.DoubleValue> tilledSoilMultiplier;
-    public static ConfigValue<Double, ForgeConfigSpec.DoubleValue> tilledEndMultiplier;
-    public static ConfigValue<Boolean, ForgeConfigSpec.BooleanValue> tilledEndStone;
-    public static ConfigValue<Integer, ForgeConfigSpec.IntValue> miteChance;
-    public static ConfigValue<Boolean, ForgeConfigSpec.BooleanValue> endstoneNeedsUnbreaking;
+    public static final ModConfigSpec COMMON_CONFIG;
+    public static ConfigValue<Double, ModConfigSpec.DoubleValue> tilledSoilMultiplier;
+    public static ConfigValue<Double, ModConfigSpec.DoubleValue> tilledEndMultiplier;
+    public static ConfigValue<Boolean, ModConfigSpec.BooleanValue> tilledEndStone;
+    public static ConfigValue<Integer, ModConfigSpec.IntValue> miteChance;
+    public static ConfigValue<Boolean, ModConfigSpec.BooleanValue> endstoneNeedsUnbreaking;
 
     static {
-        final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        final ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         buildConfig(builder);
         COMMON_CONFIG = builder.build();
     }
 
-    public static void buildConfig(ForgeConfigSpec.Builder builder) {
+    public static void buildConfig(ModConfigSpec.Builder builder) {
         tilledSoilMultiplier = ConfigValue.defineDouble(
             builder,
             "tilledSoilMultiplier",
@@ -55,15 +55,15 @@ public final class EnderCropConfiguration {
             "Require a hoe to be enchanted with Unbreaking (I) to till End stone.");
     }
 
-    public static void onLoad(ModConfig modConfig) {
-        EnderCrop.LOGGER.info("Reloading {} from disk", modConfig.getFileName());
-        COMMON_CONFIG.acceptConfig(modConfig.getConfigData());
+    public static void onLoad(String configFile, CommentedConfig configData) {
+        EnderCrop.LOGGER.info("Reloading {} from disk", configFile);
+        COMMON_CONFIG.acceptConfig(configData);
     }
 
     /**
      * Wrapper around the Forge config spec to make it easier to use when building the {@link ConfigScreen}.
      */
-    public static class ConfigValue<T, V extends ForgeConfigSpec.ConfigValue<T>> {
+    public static class ConfigValue<T, V extends ModConfigSpec.ConfigValue<T>> {
 
         private final V configValue;
         private final String path;
@@ -79,7 +79,7 @@ public final class EnderCropConfiguration {
             this.comment = Component.literal(String.join("\n", comment));
         }
 
-        public static ConfigValue<Double, ForgeConfigSpec.DoubleValue> defineDouble(ForgeConfigSpec.Builder builder,
+        public static ConfigValue<Double, ModConfigSpec.DoubleValue> defineDouble(ModConfigSpec.Builder builder,
                                                                                     String path, double defaultValue,
                                                                                     double min, double max,
                                                                                     String... comment) {
@@ -87,7 +87,7 @@ public final class EnderCropConfiguration {
                 path, min, max, comment);
         }
 
-        public static ConfigValue<Integer, ForgeConfigSpec.IntValue> defineInt(ForgeConfigSpec.Builder builder,
+        public static ConfigValue<Integer, ModConfigSpec.IntValue> defineInt(ModConfigSpec.Builder builder,
                                                                                String path, int defaultValue, int min,
                                                                                int max, String... comment) {
             return new ConfigValue<>(
@@ -95,7 +95,7 @@ public final class EnderCropConfiguration {
             );
         }
 
-        public static ConfigValue<Boolean, ForgeConfigSpec.BooleanValue> defineBoolean(ForgeConfigSpec.Builder builder,
+        public static ConfigValue<Boolean, ModConfigSpec.BooleanValue> defineBoolean(ModConfigSpec.Builder builder,
                                                                                        String path,
                                                                                        boolean defaultValue,
                                                                                        String... comment) {

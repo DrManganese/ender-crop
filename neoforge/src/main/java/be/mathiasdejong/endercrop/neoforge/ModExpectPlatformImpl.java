@@ -1,4 +1,4 @@
-package be.mathiasdejong.endercrop.forge;
+package be.mathiasdejong.endercrop.neoforge;
 
 import be.mathiasdejong.endercrop.ModExpectPlatform;
 import be.mathiasdejong.endercrop.Reference;
@@ -9,22 +9,23 @@ import be.mathiasdejong.endercrop.init.ModBlocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-import dev.architectury.platform.forge.EventBuses;
+import dev.architectury.platform.hooks.EventBusesHooks;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.IPlantable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.Consumer;
 
 import static be.mathiasdejong.endercrop.Reference.MOD_ID;
 
@@ -39,38 +40,34 @@ public class ModExpectPlatformImpl extends ModExpectPlatform {
 
             @Override
             public boolean canSustainPlant(
-                    BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
+                BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
                 final BlockState plant = plantable.getPlant(world, pos.offset(facing.getNormal()));
                 return plant.getBlock() == ModBlocks.ENDER_CROP.get();
-            }
-
-            @Override
-            public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-                if (!level.isClientSide
-                        && ForgeHooks.onFarmlandTrample(
-                                level, pos, Blocks.END_STONE.defaultBlockState(), fallDistance, entity))
-                    turnToEndStone(level.getBlockState(pos), level, pos);
-
-                entity.causeFallDamage(
-                    fallDistance, 1.0F, level.damageSources().fall());
             }
         };
     }
 
     public static void initConfig() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EnderCropConfiguration.COMMON_CONFIG, Reference.CONFIG_FILE);
-        EventBuses.getModEventBus(MOD_ID).ifPresent(bus -> {
-            bus.addListener((ModConfigEvent.Loading event) -> EnderCropConfiguration.onLoad(event.getConfig()));
-            bus.addListener((ModConfigEvent.Reloading event) -> EnderCropConfiguration.onLoad(event.getConfig()));
+        EventBusesHooks.whenAvailable(MOD_ID, bus -> {
+            final Consumer<ModConfigEvent> onLoad = (event) ->
+                EnderCropConfiguration.onLoad(
+                    event.getConfig().getFileName(),
+                    event.getConfig().getConfigData()
+                );
+            bus.addListener((ModConfigEvent.Loading event) -> onLoad.accept(event));
+            bus.addListener((ModConfigEvent.Reloading event) -> onLoad.accept(event));
         });
     }
 
-    public static boolean onCropsGrowPre(Level level, BlockPos pos, BlockState state, boolean doGrow) {
-        return ForgeHooks.onCropsGrowPre(level, pos, state, doGrow);
+    /* Neoforge-specific hooks */
+
+    public static boolean onCropsGrowPre(ServerLevel level, BlockPos pos, BlockState state, boolean doGrow) {
+        return CommonHooks.onCropsGrowPre(level, pos, state, doGrow);
     }
 
-    public static void onCropsGrowPost(Level level, BlockPos pos, BlockState state) {
-        ForgeHooks.onCropsGrowPost(level, pos, state);
+    public static void onCropsGrowPost(ServerLevel level, BlockPos pos, BlockState state) {
+        CommonHooks.onCropsGrowPost(level, pos, state);
     }
 
     public static boolean canSustainPlant(
@@ -79,6 +76,7 @@ public class ModExpectPlatformImpl extends ModExpectPlatform {
     }
 
     public static boolean onFarmlandTrample(Level level, BlockPos pos, BlockState blockState, float fallDistance, Entity entity) {
-        return ForgeHooks.onFarmlandTrample(level, pos, blockState, fallDistance, entity);
+        // This uses the entity.canTrample logic and allows interception
+        return CommonHooks.onFarmlandTrample(level, pos, blockState, fallDistance, entity);
     }
 }

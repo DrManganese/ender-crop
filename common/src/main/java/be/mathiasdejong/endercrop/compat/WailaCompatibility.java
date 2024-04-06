@@ -6,7 +6,6 @@ import be.mathiasdejong.endercrop.block.EnderCropBlock;
 import be.mathiasdejong.endercrop.config.EnderCropConfiguration;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -18,7 +17,6 @@ import net.minecraft.world.phys.Vec2;
 import snownee.jade.api.*;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElementHelper;
-import snownee.jade.impl.ui.SubTextElement;
 
 import static net.minecraft.ChatFormatting.*;
 
@@ -44,7 +42,7 @@ public class WailaCompatibility implements IWailaPlugin {
             final EnderCropBlock enderCrop = (EnderCropBlock) blockAccessor.getBlock();
 
             if (!enderCrop.isMaxAge(blockAccessor.getBlockState())) {
-                if (!enderCrop.isDarkEnough(blockAccessor.getLevel(), blockAccessor.getPosition())) {
+                if (!EnderCropBlock.hasSufficientLight(blockAccessor.getLevel(), blockAccessor.getPosition())) {
                     tooltip.add(NO_GROWTH);
                     if (blockAccessor.getPlayer().isCrouching()) {
                         final int lightLevel = blockAccessor.getLevel().getRawBrightness(blockAccessor.getPosition(),
@@ -84,7 +82,7 @@ public class WailaCompatibility implements IWailaPlugin {
 
         @Override
         public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig pluginConfig) {
-            final IElementHelper elements = tooltip.getElementHelper();
+            final IElementHelper elements = IElementHelper.get();
 
             if (blockAccessor.getBlock().equals(Blocks.END_STONE) && EnderCropConfiguration.tilledEndStone.get()) {
                 final ItemStack hoeStack = HoeHelper.holdingHoeTool(blockAccessor.getPlayer());
@@ -92,7 +90,7 @@ public class WailaCompatibility implements IWailaPlugin {
                     final boolean canTill = HoeHelper.canTillEndstone(hoeStack, blockAccessor.getPlayer());
                     tooltip.add(elements.item(EnderCropConfiguration.endstoneNeedsUnbreaking.get() ? ENCHANTED_HOE :
                         HOE, 0.75F).size(new Vec2(10, 13)).translate(new Vec2(-2, -2)));
-                    tooltip.append(new SubTextElement(canTill ? CHECK : X).translate(new Vec2(-3.5f, 6)));
+                    tooltip.append(elements.text(canTill ? CHECK : X).translate(new Vec2(-3.5f, 6)));
                     tooltip.append(elements.spacer(4, 0));
                     tooltip.append(elements.text(TILL.copy().append(unbreakingHint(canTill))).translate(new Vec2(0, 2)));
                 }

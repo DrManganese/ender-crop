@@ -6,10 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -59,18 +56,13 @@ public class TilledEndstoneBlock extends FarmBlock {
         }
     }
 
-    @SuppressWarnings("ConstantValue")
     @Override
     public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        if (!level.isClientSide
-            && ModExpectPlatform.onFarmlandTrample(level, pos, END_STONE.defaultBlockState(), fallDistance, entity)
-            && level.random.nextFloat() < fallDistance - 0.5F
-            && entity instanceof LivingEntity
-            && (entity instanceof Player || level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))
-            && entity.getBbWidth() * entity.getBbWidth() * entity.getBbHeight() > 0.512F)
+        //noinspection ConstantValue
+        if (!level.isClientSide && ModExpectPlatform.onFarmlandTrample(level, pos, state, fallDistance, entity))
             turnToEndStone(level.getBlockState(pos), level, pos);
 
-        entity.causeFallDamage(fallDistance, 1.0F, level.damageSources().fall());
+        entity.causeFallDamage(fallDistance, 1.0F, entity.damageSources().fall());
     }
 
     public static void turnToEndStone(BlockState state, Level level, BlockPos pos) {

@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[47,)"
+loaderVersion = "[2,)"
 license = "${mod_licence}"
 
 [[mods]]
@@ -12,20 +12,14 @@ logoFile = "logo-wide.png"
 logoBlur = false
 
 [[dependencies.${mod_id}]]
-modId = "forge"
-mandatory = true
-versionRange = "[47.1,)"
-ordering = "NONE"
-side = "BOTH"
-[[dependencies.${mod_id}]]
-modId = "minecraft"
-mandatory = true
-versionRange = "[1.20,1.21)"
+modId = "neoforge"
+type = "required"
+versionRange = "[20.4,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.${mod_id}]]
 modId = "architectury"
-mandatory = true
+type = "required"
 versionRange = "[${architectury_version},)"
 ordering = "NONE"
 side = "BOTH"

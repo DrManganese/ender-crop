@@ -1,4 +1,4 @@
-package be.mathiasdejong.endercrop.forge.compat;
+package be.mathiasdejong.endercrop.neoforge.compat;
 
 import be.mathiasdejong.endercrop.HoeHelper;
 import be.mathiasdejong.endercrop.Reference;
@@ -13,10 +13,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.InterModComms;
 
 import com.google.common.base.Function;
 import mcjty.theoneprobe.api.*;
+import net.neoforged.fml.InterModComms;
 
 import javax.annotation.Nullable;
 
@@ -54,7 +54,7 @@ public final class TOPCompatibility implements Function<ITheOneProbe, Void> {
                     final EnderCropBlock enderCrop = (EnderCropBlock) blockState.getBlock();
 
                     if (!enderCrop.isMaxAge(blockState)) {
-                        if (!enderCrop.isDarkEnough(world, data.getPos())) {
+                        if (!EnderCropBlock.hasSufficientLight(world, data.getPos())) {
                             probeInfo.text(CompoundText.create().error("{*endercrop.wailatop.nogrowth*}"));
                             if (mode == ProbeMode.EXTENDED) {
                                 final int lightLevel = world.getRawBrightness(data.getPos(), 0);

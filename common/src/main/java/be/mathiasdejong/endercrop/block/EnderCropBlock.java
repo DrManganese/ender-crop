@@ -62,6 +62,10 @@ public class EnderCropBlock extends CropBlock {
         }
     }
 
+    private static boolean isOnEndstone(LevelReader worldIn, BlockPos pos) {
+        return worldIn.getBlockState(pos.below()).is(ModBlocks.TILLED_END_STONE.get());
+    }
+
     @Override
     public boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         return state.is(Blocks.FARMLAND) || state.is(ModBlocks.TILLED_END_STONE.get());
@@ -69,35 +73,37 @@ public class EnderCropBlock extends CropBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (isDarkEnough(level, pos)) {
+        if (!level.isLoaded(pos)) return; // Neoforge
+        if (hasSufficientLight(level, pos)) {
             final int age = this.getAge(state);
             if (!this.isMaxAge(state)) {
                 final float growthChance = getGrowthSpeed(this, level, pos);
                 final boolean doGrow = growthChance > 0 && random.nextInt((int) (25.0F / growthChance) + 1) == 0;
-                if (ModExpectPlatform.onCropsGrowPre(level, pos, state, doGrow)) {
+                if (ModExpectPlatform.onCropsGrowPre(level, pos, state, doGrow)) { // Neoforge
                     level.setBlock(pos, this.getStateForAge(age + 1), 2);
-                    ModExpectPlatform.onCropsGrowPost(level, pos, state);
+                    ModExpectPlatform.onCropsGrowPost(level, pos, state);  // Neoforge
                 }
             }
         }
     }
 
-    public boolean isDarkEnough(Level worldIn, BlockPos pos) {
+    public static boolean hasSufficientLight(LevelReader worldIn, BlockPos pos) {
         return isOnEndstone(worldIn, pos) || worldIn.getRawBrightness(pos, 0) <= 7;
     }
 
     // Reimplementing the whole thing because it's static, and we don't want to penalize tilled end stone
+    @SuppressWarnings("UnreachableCode")
     protected static float getGrowthSpeed(Block block, Level level, BlockPos pos) {
         float f = 1.0F;
-        BlockPos blockPos = pos.below();
+        BlockPos soilPos = pos.below();
 
-        for(int i = -1; i <= 1; ++i) {
-            for(int j = -1; j <= 1; ++j) {
+        for (int i = -1; i <= 1; ++i) {
+            for (int j = -1; j <= 1; ++j) {
                 float g = 0.0F;
-                BlockState blockState = level.getBlockState(blockPos.offset(i, 0, j));
-                if (blockState.is(Blocks.FARMLAND) || blockState.is(ModBlocks.TILLED_END_STONE.get())) {
+                BlockState soilState = level.getBlockState(soilPos.offset(i, 0, j));
+                if (ModExpectPlatform.canSustainPlant(soilState, level, soilPos, Direction.UP, (EnderCropBlock) block)) {
                     g = 1.0F;
-                    if (blockState.getValue(FarmBlock.MOISTURE) > 0) {
+                    if (soilState.getValue(FarmBlock.MOISTURE) > 0) {
                         g = 3.0F;
                     }
                 }
@@ -140,18 +146,10 @@ public class EnderCropBlock extends CropBlock {
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        boolean lightCheck;
-        if (isOnEndstone(level, pos)) lightCheck = level.getRawBrightness(pos, 0) >= 8 || level.canSeeSky(pos);
-        else lightCheck = level.getRawBrightness(pos, 0) <= 7;
-
         final BlockPos below = pos.below();
         //noinspection ConstantValue
-        return lightCheck
+        return hasSufficientLight(level, pos)
             && ModExpectPlatform.canSustainPlant(level.getBlockState(below), level, below, Direction.UP, this);
-    }
-
-    private static boolean isOnEndstone(LevelReader worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos.below()).is(ModBlocks.TILLED_END_STONE.get());
     }
 
     @Override
@@ -161,7 +159,7 @@ public class EnderCropBlock extends CropBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         return false;
     }
 

@@ -4,15 +4,15 @@ plugins {
 
 architectury {
     platformSetupLoomIde()
-    forge()
+    neoForge()
 }
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
 
-    forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+    neoForge {
+//        convertAccessWideners = true
+//        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
     }
 }
 
@@ -21,7 +21,7 @@ configurations {
     shadowCommon
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    developmentNeoForge.extendsFrom common
 }
 
 repositories {
@@ -29,16 +29,16 @@ repositories {
 }
 
 dependencies {
-    forge "net.neoforged:forge:${rootProject.minecraft_version}-${rootProject.neoforge_version}"
-    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+    neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
+    modApi "dev.architectury:architectury-neoforge:${rootProject.architectury_version}"
 
-    modImplementation("fuzs.forgeconfigscreens:forgeconfigscreens-forge:8.0.2")
+//    modImplementation("fuzs.forgeconfigscreens:forgeconfigscreens-forge:8.0.2")
 
-    modImplementation("maven.modrinth:jade:2iRQrBk4")
-    modImplementation("mcjty.theoneprobe:theoneprobe:1.20.1-10.0.1-3") { transitive false }
+    modImplementation("maven.modrinth:jade:9rrZAORZ")
+    modImplementation("mcjty.theoneprobe:theoneprobe:1.20.4_neo-11.0.2-3") { transitive false }
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
 }
 
 processResources {
