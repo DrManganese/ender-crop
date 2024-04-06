@@ -61,7 +61,7 @@ remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
     from(rootProject.file("./LICENSE"))
-    archiveClassifier.set(null)
+    archiveClassifier.set("neoforge")
 }
 
 jar {
