@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    {
+      "name": "${mod_author}",
+      "contact": {
+        "homepage": "mathiasdejong.be"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "${mod_url}",
+    "sources": "${mod_url}/tree/main",
+    "issues": "${mod_url}/issues"
+  },
+  "license": "${mod_licence}",
+  "icon": "icon-fabric.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "be.mathiasdejong.endercrop.fabric.EnderCrop"
+    ],
+    "modmenu": [
+      "be.mathiasdejong.endercrop.fabric.config.ConfigScreen"
+    ],
+    "jade": [
+      "be.mathiasdejong.endercrop.compat.WailaCompatibility"
+    ]
+  },
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.20.1",
+    "architectury": ">=${architectury_version}",
+    "forgeconfigapiport": ">=8.0.0"
+  }
+}
