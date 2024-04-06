@@ -1,0 +1,30 @@
+on:
+  release:
+    types: [published]
+
+jobs:
+  call-build:
+    uses: ./.github/workflows/build.yml
+  verify-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Compare Gradle project version and release tag
+        run: |
+          project_version="$(./gradlew -q --no-daemon common:properties --property version | tail -1 | cut -f2 -d':' | tr -d ' ')"
+          echo "::group::Versions"
+          echo "Project version = v${project_version}"
+          echo "Release version = ${{ github.event.release.tag_name }}"
+          echo "::endgroup::"
+          if [ "v${project_version}" != "${{ github.event.release.tag_name }}" ]; then
+            echo "::error file=gradle.properties::Project version does not match released tag"
+            exit 1
+          fi

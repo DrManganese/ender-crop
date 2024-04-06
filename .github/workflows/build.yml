@@ -3,6 +3,7 @@ name: Gradle build
 on:
   push:
     branches: [ '*' ]
+  workflow_call:
 
 jobs:
   build:
